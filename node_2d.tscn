@@ -1,28 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://co0ngvwl806b3"]
+[gd_scene load_steps=2 format=3 uid="uid://co0ngvwl806b3"]
 
-[ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_jqkr0"]
-[ext_resource type="Script" path="res://Icon.cs" id="2_4ghvp"]
+[ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://character_body_2d.tscn" id="1_rwkut"]
 
 [node name="Node2D" type="Node2D"]
 position = Vector2(264, 289)
 
-[node name="Icon" type="Sprite2D" parent="."]
-position = Vector2(-197, -225)
-texture = ExtResource("1_jqkr0")
-script = ExtResource("2_4ghvp")
-
-[node name="spriteRight" type="Sprite2D" parent="Icon"]
-
-[node name="spriteLeft" type="Sprite2D" parent="Icon"]
-
-[node name="spriteUp" type="Sprite2D" parent="Icon"]
-
-[node name="spriteDown" type="Sprite2D" parent="Icon"]
-
-[node name="spriteUpRight" type="Sprite2D" parent="Icon"]
-
-[node name="spriteUpLeft" type="Sprite2D" parent="Icon"]
-
-[node name="spriteDownRight" type="Sprite2D" parent="Icon"]
-
-[node name="spriteDownLeft" type="Sprite2D" parent="Icon"]
+[node name="CharacterBody2D" parent="." instance=ExtResource("1_rwkut")]
