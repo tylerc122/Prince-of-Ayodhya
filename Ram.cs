@@ -5,31 +5,22 @@ public partial class Ram : CharacterBody2D
 {
 	// Controls speed of Ram.
 	public int speed = 350;
-
 	// Controls sprint speed of Ram.
 	public int sprintSpeed = 500;
-
 	// Controls roll speed of Ram.
 	public int rollSpeed = 750;
-
 	// Controls max health of Ram.
 	public int maxHealth = 100;
-
 	// Controls current health of Ram.
 	public int currentHealth;
-
 	// Controls max stamina of Ram.
 	public int maxStamina = 100;
-
 	// Controls current stamina of Ram.
 	public int currentStamina;
-
 	// Controls how fast Ram's stamina drains.
 	public int staminaDrain = 10;
-
 	// Controls how fast Ram's stamina regenerates.
-	public int staminaRegen = 5;
-
+	public int staminaRegen = 10;
 	// Tracks the last known direction traversed
 	// 1 for right, 2 for left, 3 for up, 4 for down, 5 for up_right, 6 for up_left, 7 for down_right, 8 for down_left.
 	public int tracker = 0;
@@ -39,6 +30,7 @@ public partial class Ram : CharacterBody2D
 	private CollisionShape2D collisionShape2D;
 	private Timer rollTimer;
 	private Vector2 rollDirection;
+	private Timer staminaRegenTimer;
 
 	// Controls how long the roll lasts.
 	private const float roll_duration = 0.34f;
@@ -72,6 +64,17 @@ public partial class Ram : CharacterBody2D
 
 		currentHealth = maxHealth;
 
+		currentStamina = maxStamina;
+
+		staminaRegenTimer = GetNode<Timer>("StaminaRegenTimer");
+
+		staminaRegenTimer.WaitTime = 1.0f;
+
+		staminaRegenTimer.Connect("timeout", new Callable(this, nameof(RegenerateStamina)));
+
+		staminaRegenTimer.Start();
+
+
 		// We also want to initalize a starting animation, we'll have ram's idle_right animation playing as we start a new level.
 		animatedSprite2D.Play("idle_right");
 	}
@@ -95,6 +98,19 @@ public partial class Ram : CharacterBody2D
 		if (currentHealth > maxHealth)
 		{
 			currentHealth = maxHealth;
+		}
+	}
+
+	public void RegenerateStamina()
+	{
+		if (currentStamina < maxStamina)
+		{
+			currentStamina += staminaRegen;
+
+			if (currentStamina > maxStamina)
+			{
+				currentStamina = maxStamina;
+			}
 		}
 	}
 
@@ -122,6 +138,20 @@ public partial class Ram : CharacterBody2D
 		bool movingDown = Input.IsActionPressed("ui_down");
 		bool roll = Input.IsActionPressed("ui_roll");
 		bool sprint = Input.IsActionPressed("ui_sprint");
+
+		if (sprint && currentStamina > 0)
+		{
+			currentStamina -= staminaDrain;
+
+			if (currentStamina < 0)
+			{
+				currentStamina = 0;
+			}
+		}
+		else if (currentStamina <= 0)
+		{
+			sprint = false;
+		}
 
 		// Cardinal & Ordinal Directions.
 		// Check if right key is being pressed.
@@ -311,10 +341,11 @@ public partial class Ram : CharacterBody2D
 		}
 
 		// If the roll button is pressed and our rollTimer isn't running.
-		if (roll && rollTimer.IsStopped())
+		if (roll && rollTimer.IsStopped() && currentStamina >= 40)
 		{
 			// We allow the user to roll.
 			StartRoll();
+			currentStamina -= 40;
 		}
 	}
 
