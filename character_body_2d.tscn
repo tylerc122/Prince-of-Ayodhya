@@ -609,3 +609,5 @@ stream = ExtResource("12_l1qh7")
 metadata/_edit_group_ = true
 
 [node name="AudioStopTimer" type="Timer" parent="."]
+
+[node name="StaminaRegenTimer" type="Timer" parent="."]
