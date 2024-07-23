@@ -19,7 +19,7 @@ public partial class Ram : CharacterBody2D
 	private Vector2 rollDirection;
 
 	// Controls how long the roll lasts.
-	private const float roll_duration = 0.5f;
+	private const float roll_duration = 0.42f;
 
 	// An integral piece of our animations is making sure they don't clash, intially, without this bool var, as soon as the roll button was pressed, the animation would stop after a frame due to either the walking,
 	// or the idle animation playing immmediately after, to fix this, we make sure the user isn't in a roll before we play any other animations.
@@ -60,7 +60,8 @@ public partial class Ram : CharacterBody2D
 		if (isRolling)
 		{
 			// If he is, we need to immediately update his position based on our roll speed and direction and then return.
-			Position += rollDirection * RollSpeed * (float)delta;
+			Velocity = rollDirection * RollSpeed;
+			MoveAndSlide();
 			return;
 		}
 
@@ -170,10 +171,11 @@ public partial class Ram : CharacterBody2D
 		{
 			// If our vector is anything but (0,0), we normalize the vector velocity, ensuring the direction of movement is maintained but the length of the vector is set to 1.
 			// We then multiply that normalized velocity by both speed and delta time, this adjusts the velocity to reflect the desired speed and also makes it frame independent.
-			velocity = velocity.Normalized() * Speed * (float)delta;
+			velocity = velocity.Normalized() * Speed;
 
 			// We then update the position of ram.
-			Position += velocity;
+			Velocity = velocity;
+			MoveAndSlide();
 
 			// After that, we can start handling animations, based on what our x and y components of velocity are doing, we can update the animations accordingly.
 			// This is also where, if we decide to in the future, we could update our animations to also handle ordinal direction animation handling.
@@ -318,7 +320,7 @@ public partial class Ram : CharacterBody2D
 		// Once an animation has been chosen, we immediately disable our collision shape and start the timer.
 		collisionShape2D.Disabled = true;
 		rollTimer.Start();
-		GD.Print("Timer Started");
+		GD.Print("No Collision" + " " + collisionShape2D.Disabled);
 	}
 
 	/// Handles enabling our collisionShape.
@@ -328,7 +330,7 @@ public partial class Ram : CharacterBody2D
 		// and we will return to our original state, turning our colisionShape back on.
 		isRolling = false;
 		collisionShape2D.Disabled = false;
-		GD.Print("Timer Ended");
+		GD.Print("No Collision" + " " + collisionShape2D.Disabled);
 	}
 }
 
