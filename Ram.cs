@@ -4,9 +4,31 @@ using System;
 public partial class Ram : CharacterBody2D
 {
 	// Controls speed of Ram.
-	public int Speed = 350;
+	public int speed = 350;
+
+	// Controls sprint speed of Ram.
+	public int sprintSpeed = 500;
+
 	// Controls roll speed of Ram.
-	public int RollSpeed = 750;
+	public int rollSpeed = 750;
+
+	// Controls max health of Ram.
+	public int maxHealth = 100;
+
+	// Controls current health of Ram.
+	public int currentHealth;
+
+	// Controls max stamina of Ram.
+	public int maxStamina = 100;
+
+	// Controls current stamina of Ram.
+	public int currentStamina;
+
+	// Controls how fast Ram's stamina drains.
+	public int staminaDrain = 10;
+
+	// Controls how fast Ram's stamina regenerates.
+	public int staminaRegen = 5;
 
 	// Tracks the last known direction traversed
 	// 1 for right, 2 for left, 3 for up, 4 for down, 5 for up_right, 6 for up_left, 7 for down_right, 8 for down_left.
@@ -48,8 +70,32 @@ public partial class Ram : CharacterBody2D
 		// When the our timer, rollTimer, times out, we call the func OnRollTimerTimeout().
 		rollTimer.Connect("timeout", new Callable(this, nameof(OnRollTimerTimeout)));
 
+		currentHealth = maxHealth;
+
 		// We also want to initalize a starting animation, we'll have ram's idle_right animation playing as we start a new level.
 		animatedSprite2D.Play("idle_right");
+	}
+
+	public void TakeDamage(int amount)
+	{
+		currentHealth -= amount;
+
+		if (currentHealth <= 0)
+		{
+			currentHealth = 0;
+
+			GD.Print("Game Over!");
+		}
+	}
+
+	public void Heal(int amount)
+	{
+		currentHealth += amount;
+
+		if (currentHealth > maxHealth)
+		{
+			currentHealth = maxHealth;
+		}
 	}
 
 	/// _PhysicsProcess will handle all of our animations as well as basic cardinal movement, we decided not to have animations for
@@ -60,7 +106,7 @@ public partial class Ram : CharacterBody2D
 		if (isRolling)
 		{
 
-			Velocity = rollDirection * RollSpeed;
+			Velocity = rollDirection * rollSpeed;
 			MoveAndSlide();
 			return;
 		}
@@ -75,6 +121,7 @@ public partial class Ram : CharacterBody2D
 		bool movingUp = Input.IsActionPressed("ui_up");
 		bool movingDown = Input.IsActionPressed("ui_down");
 		bool roll = Input.IsActionPressed("ui_roll");
+		bool sprint = Input.IsActionPressed("ui_sprint");
 
 		// Cardinal & Ordinal Directions.
 		// Check if right key is being pressed.
@@ -169,9 +216,9 @@ public partial class Ram : CharacterBody2D
 		// First we check whether or not the velocity vector is zero or not.
 		if (velocity != Vector2.Zero)
 		{
-			// If our vector is anything but (0,0), we normalize the vector velocity, ensuring the direction of movement is maintained but the length of the vector is set to 1.
-			// We then multiply that normalized velocity by both speed and delta time, this adjusts the velocity to reflect the desired speed and also makes it frame independent.
-			velocity = velocity.Normalized() * Speed;
+			// If our vector is anything but (0,0) We  use a ternary operator. 
+			// If sprint is being held down, we mult our normalized velocity by the sprint speed rather than the normal walking speed, if it isn't then we just mult by speed.
+			velocity = velocity.Normalized() * (sprint ? sprintSpeed : speed);
 
 
 			Velocity = velocity;
@@ -321,7 +368,6 @@ public partial class Ram : CharacterBody2D
 		// Once an animation has been chosen, we immediately disable our collision shape and start the timer.
 		collisionShape2D.Disabled = true;
 		rollTimer.Start();
-		GD.Print("No Collision" + " " + collisionShape2D.Disabled);
 	}
 
 	/// Handles enabling our collisionShape.
@@ -331,7 +377,6 @@ public partial class Ram : CharacterBody2D
 		// and we will return to our original state, turning our colisionShape back on.
 		isRolling = false;
 		collisionShape2D.Disabled = false;
-		GD.Print("No Collision" + " " + collisionShape2D.Disabled);
 	}
 }
 
