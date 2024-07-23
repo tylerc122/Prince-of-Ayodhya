@@ -446,7 +446,7 @@ animation = &"roll_left"
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 2)
+position = Vector2(0.142857, 2)
 shape = SubResource("RectangleShape2D_onaqn")
 metadata/_edit_group_ = true
 
