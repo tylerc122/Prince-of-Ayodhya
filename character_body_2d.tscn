@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://dn4qnebn34x1u"]
+[gd_scene load_steps=67 format=3 uid="uid://dn4qnebn34x1u"]
 
 [ext_resource type="Script" path="res://Ram.cs" id="1_7rn7d"]
 [ext_resource type="Texture2D" uid="uid://f1udf2t22mr" path="res://sprites/Rama_Forwards_walk.png" id="2_drkwa"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://buq5ssl84r7sb" path="res://sprites/Rama_Backwards_idle.png" id="6_qn06w"]
 [ext_resource type="Texture2D" uid="uid://jpe3qqwhqujq" path="res://sprites/Rama_Backwards_walk.png" id="8_12da6"]
 [ext_resource type="Texture2D" uid="uid://cdo2we4an3neo" path="res://sprites/Rama_right_walk.png" id="8_e18to"]
+[ext_resource type="Texture2D" uid="uid://5p54aek0vrdq" path="res://sprites/Rama_roll.png" id="9_dlgl5"]
+[ext_resource type="Texture2D" uid="uid://d0a73vrx13sbi" path="res://sprites/Rama_roll_right.png" id="10_y3gbh"]
+[ext_resource type="AudioStream" uid="uid://cdsq6l2qab5kn" path="res://sounds/rollsound1.wav" id="12_l1qh7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_twxjg"]
 atlas = ExtResource("2_drkwa")
@@ -121,6 +124,86 @@ region = Rect2(32, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_i650y"]
 atlas = ExtResource("8_e18to")
 region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bw0lc"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sitvt"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b46im"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_umuaa"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5c3jn"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iumxo"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ekyd"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6qsn"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lpabi"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssbnt"]
+atlas = ExtResource("9_dlgl5")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cryxp"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rca0k"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ru35"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fbymy"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bm43j"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oe6hl"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxls2"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwqot"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gtdcw"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1q8q"]
+atlas = ExtResource("10_y3gbh")
+region = Rect2(144, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hphvc"]
 atlas = ExtResource("8_12da6")
@@ -261,6 +344,76 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_bw0lc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sitvt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b46im")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_umuaa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5c3jn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iumxo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ekyd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n6qsn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lpabi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ssbnt")
+}],
+"loop": true,
+"name": &"roll_left",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cryxp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rca0k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ru35")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbymy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bm43j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oe6hl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxls2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwqot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gtdcw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1q8q")
+}],
+"loop": true,
+"name": &"roll_right",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_hphvc")
 }, {
 "duration": 1.0,
@@ -289,10 +442,18 @@ metadata/_edit_group_ = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_bf67w")
-animation = &"right"
+animation = &"roll_left"
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_onaqn")
 metadata/_edit_group_ = true
+
+[node name="RollTimer" type="Timer" parent="."]
+
+[node name="RollSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_l1qh7")
+metadata/_edit_group_ = true
+
+[node name="AudioStopTimer" type="Timer" parent="."]
