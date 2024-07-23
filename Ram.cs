@@ -6,7 +6,7 @@ public partial class Ram : CharacterBody2D
 	// Controls speed of Ram.
 	public int Speed = 350;
 	// Controls roll speed of Ram.
-	public int RollSpeed = 800;
+	public int RollSpeed = 750;
 
 	// Tracks the last known direction traversed
 	// 1 for right, 2 for left, 3 for up, 4 for down, 5 for up_right, 6 for up_left, 7 for down_right, 8 for down_left.
@@ -19,7 +19,7 @@ public partial class Ram : CharacterBody2D
 	private Vector2 rollDirection;
 
 	// Controls how long the roll lasts.
-	private const float roll_duration = 0.42f;
+	private const float roll_duration = 0.34f;
 
 	// An integral piece of our animations is making sure they don't clash, intially, without this bool var, as soon as the roll button was pressed, the animation would stop after a frame due to either the walking,
 	// or the idle animation playing immmediately after, to fix this, we make sure the user isn't in a roll before we play any other animations.
@@ -59,7 +59,7 @@ public partial class Ram : CharacterBody2D
 		// Before we do any kind of idle/walking animation, we must check if we are currently in a roll state.
 		if (isRolling)
 		{
-			// If he is, we need to immediately update his position based on our roll speed and direction and then return.
+
 			Velocity = rollDirection * RollSpeed;
 			MoveAndSlide();
 			return;
@@ -173,7 +173,7 @@ public partial class Ram : CharacterBody2D
 			// We then multiply that normalized velocity by both speed and delta time, this adjusts the velocity to reflect the desired speed and also makes it frame independent.
 			velocity = velocity.Normalized() * Speed;
 
-			// We then update the position of ram.
+
 			Velocity = velocity;
 			MoveAndSlide();
 
@@ -258,7 +258,7 @@ public partial class Ram : CharacterBody2D
 					break;
 				case 8:
 					// down_left
-					animatedSprite2D.Play("idle left");
+					animatedSprite2D.Play("idle_left");
 					break;
 			}
 		}
@@ -295,6 +295,7 @@ public partial class Ram : CharacterBody2D
 				animatedSprite2D.Play("roll_down");
 				rollDirection = new Vector2(0, 1);
 				break;
+
 			case 5:
 				// up_right
 				animatedSprite2D.Play("roll_right");
