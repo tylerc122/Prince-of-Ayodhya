@@ -395,7 +395,7 @@ public partial class Ram : CharacterBody2D
 	public void RegenerateStamina()
 	{
 		// If Ram's current stamina is below max stam.
-		if (currentStamina < maxStamina)
+		if (!Input.IsActionPressed("ui_sprint") && currentStamina < maxStamina)
 		{
 			// Give him more stamina.
 			currentStamina += staminaRegen;
