@@ -72,7 +72,6 @@ public partial class Ram : CharacterBody2D
 
 		bool sprintCheck = IsSprinting();
 
-		GD.Print("Current Stamina " + currentStamina);
 
 		// First we check whether or not the velocity vector is zero or not.
 		if (velocity != Godot.Vector2.Zero)
@@ -409,4 +408,3 @@ public partial class Ram : CharacterBody2D
 		}
 	}
 }
-
