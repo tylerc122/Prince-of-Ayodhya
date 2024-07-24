@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://co0ngvwl806b3"]
+[gd_scene load_steps=9 format=3 uid="uid://co0ngvwl806b3"]
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
 [ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://character_body_2d.tscn" id="1_rwkut"]
@@ -6,6 +6,18 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tg6pq"]
 size = Vector2(123, 123)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_35c03"]
+bg_color = Color(0.609761, 0.0910078, 0.0963074, 1)
+
+[sub_resource type="Theme" id="Theme_u6rt0"]
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_35c03")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tpu45"]
+bg_color = Color(0.114243, 0.505928, 0.749199, 1)
+
+[sub_resource type="Theme" id="Theme_q8anq"]
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_tpu45")
 
 [node name="Node2D" type="Node2D"]
 y_sort_enabled = true
@@ -82,3 +94,17 @@ offset_top = 14.0
 offset_right = -12.0
 offset_bottom = 41.0
 grow_horizontal = 0
+theme = SubResource("Theme_u6rt0")
+show_percentage = false
+
+[node name="StaminaBar" type="ProgressBar" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 42.0
+offset_right = -32.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme = SubResource("Theme_q8anq")
+show_percentage = false
