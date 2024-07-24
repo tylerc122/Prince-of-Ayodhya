@@ -78,6 +78,11 @@ public partial class Ram : CharacterBody2D
 		// We also want to initalize a starting animation, we'll have ram's idle_right animation playing as we start a new level.
 		animatedSprite2D.Play("idle_right");
 	}
+	public int Health(){
+		int health;
+		health = currentHealth;
+		return health;
+	}
 
 	public void TakeDamage(int amount)
 	{
