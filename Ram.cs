@@ -12,7 +12,7 @@ public partial class Ram : CharacterBody2D
 	public int maxHealth = 100;
 	public int maxStamina = 100;
 	public int staminaDrain = 1;
-	public int staminaRegen = 13;
+	public int staminaRegen = 1;
 	private const float roll_duration = 0.34f;
 
 	// State variables
@@ -47,7 +47,7 @@ public partial class Ram : CharacterBody2D
 		currentStamina = maxStamina;
 
 		// staminaRegenTimer properties.
-		staminaRegenTimer.WaitTime = 0.4f;
+		staminaRegenTimer.WaitTime = 0.04f;
 		staminaRegenTimer.Connect("timeout", new Callable(this, nameof(RegenerateStamina)));
 		staminaRegenTimer.Start();
 
@@ -72,7 +72,6 @@ public partial class Ram : CharacterBody2D
 
 		bool sprintCheck = IsSprinting();
 
-		GD.Print("Current Stamina " + currentStamina);
 
 		// First we check whether or not the velocity vector is zero or not.
 		if (velocity != Godot.Vector2.Zero)
@@ -101,100 +100,68 @@ public partial class Ram : CharacterBody2D
 		{
 			// We allow the user to roll.
 			StartRoll();
-			currentStamina -= 40;
+			currentStamina -= 20;
 		}
 	}
 	private Godot.Vector2 CalculateVelocity()
 	{
 		// Initialize our velocity vector.
 		Godot.Vector2 velocity = new Godot.Vector2();
+		bool movingRight = Input.IsActionPressed("ui_right");
+		bool movingLeft = Input.IsActionPressed("ui_left");
+		bool movingUp = Input.IsActionPressed("ui_up");
+		bool movingDown = Input.IsActionPressed("ui_down");
+
 		// Check if right key is being pressed.
-		if (Input.IsActionPressed("ui_right"))
+		if (movingRight)
 		{
 			// If it is, x component of the velocity vector is increased by 1, in turn moving us right.
 			velocity.X += 1;
-
-			// Check if the up key is being pressed.
-			if (Input.IsActionPressed("ui_up"))
-			{
-				// If it is, we must also decrease our y component, in turn moving us up_right.
-				velocity.Y -= 1;
-
-				// Update tracker.
-				tracker = 5;
-			}
-
-			// If we aren't pressing up, check if down being pressed.
-			else if (Input.IsActionPressed("ui_down"))
-			{
-				// If it is, we must also increase our y component, in turn moving us down_right.
-				velocity.Y += 1;
-
-				// Update tracker.
-				tracker = 7;
-			}
-
-			// If only the right key is being pressed.
-			else
-			{
-				// We've already updated our position accordingly, so we just need to update the tracker.
-				tracker = 1;
-			}
-
+			tracker = 1;
 		}
 
 		// Check if the left key is being pressed.
-		if (Input.IsActionPressed("ui_left"))
+		if (movingLeft)
 		{
 			// If it is, the x component of the velocity vector is decreased by 1, in turn moving us left.
 			velocity.X -= 1;
-
-			// Check if up key being pressed.
-			if (Input.IsActionPressed("ui_up"))
-			{
-				// If it is, we must also decrease our y component, in turn moving us up_left. 
-				velocity.Y -= 1;
-
-				// Update tracker.
-				tracker = 6;
-			}
-
-			// If we aren't pressing up, check if down being pressed.
-			else if (Input.IsActionPressed("ui_down"))
-			{
-				// If it is, we must also increase our y component, in turn moving us down_left.
-				velocity.Y += 1;
-
-				// Update tracker.
-				tracker = 8;
-			}
-
-			// If only the left key is being pressed.
-			else
-			{
-				// We've already updated our position accordingly, so we just need to update the tracker.
-				tracker = 2;
-			}
+			tracker = 2;
 		}
 
-		// Check if only the up key is being pressed.
-		if (Input.IsActionPressed("ui_up"))
+		// Check if the up key is being pressed.
+		if (movingUp)
 		{
-			// If it is, only decrease y component.
+			// If it is, decrease the y component, moving us up.
 			velocity.Y -= 1;
-			// Update tracker.
 			tracker = 3;
-
 		}
 
-		// Check if only the down key is being pressed.
-		if (Input.IsActionPressed("ui_down"))
+		// Check if the down key is being pressed.
+		if (movingDown)
 		{
-			// If it is, only increase y component.
+			// If it is, increase the y component, moving us down.
 			velocity.Y += 1;
-			// Update tracker.
 			tracker = 4;
 		}
+
+		// Update tracker for diagonal movements.
+		if (movingRight && movingUp)
+		{
+			tracker = 5; // up_right
+		}
+		else if (movingRight && movingDown)
+		{
+			tracker = 7; // down_right
+		}
+		else if (movingLeft && movingUp)
+		{
+			tracker = 6; // up_left
+		}
+		else if (movingLeft && movingDown)
+		{
+			tracker = 8; // down_left
+		}
+
 		return velocity;
 	}
 	/// Handles when Ram is sprinting.
@@ -308,39 +275,47 @@ public partial class Ram : CharacterBody2D
 		switch (tracker)
 		{
 			case 1:
+				GD.Print("r");
 				animatedSprite2D.Play("roll_right");
 				rollDirection = new Godot.Vector2(1, 0);
 				break;
 			case 2:
+				GD.Print("l");
 				animatedSprite2D.Play("roll_left");
 				rollDirection = new Godot.Vector2(-1, 0);
 				break;
 			case 3:
+				GD.Print("u");
 				animatedSprite2D.Play("roll_up");
 				rollDirection = new Godot.Vector2(0, -1);
 				break;
 			case 4:
+				GD.Print("d");
 				animatedSprite2D.Play("roll_down");
 				rollDirection = new Godot.Vector2(0, 1);
 				break;
 
 			case 5:
 				// up_right
+				GD.Print("ur");
 				animatedSprite2D.Play("roll_right");
 				rollDirection = new Godot.Vector2(1, -1).Normalized();
 				break;
 			case 6:
 				// up_left
+				GD.Print("ul");
 				animatedSprite2D.Play("roll_left");
 				rollDirection = new Godot.Vector2(-1, -1).Normalized();
 				break;
 			case 7:
 				// down_right
+				GD.Print("dr");
 				animatedSprite2D.Play("roll_right");
 				rollDirection = new Godot.Vector2(1, 1).Normalized();
 				break;
 			case 8:
 				// down_left
+				GD.Print("dl");
 				animatedSprite2D.Play("roll_left");
 				rollDirection = new Godot.Vector2(-1, 1).Normalized();
 				break;
@@ -409,4 +384,3 @@ public partial class Ram : CharacterBody2D
 		}
 	}
 }
-
