@@ -28,6 +28,9 @@ public partial class Ram : CharacterBody2D
 	private Timer rollTimer;
 	private Timer staminaRegenTimer;
 
+	// Event(s)
+	public event Action OnDeath;
+
 	/// _Ready is called when a node is added to the scene tree and all its children nodes are ready
 	public override void _Ready()
 	{
@@ -47,7 +50,7 @@ public partial class Ram : CharacterBody2D
 		currentStamina = maxStamina;
 
 		// staminaRegenTimer properties.
-		staminaRegenTimer.WaitTime = 0.04f;
+		staminaRegenTimer.WaitTime = 0.05f;
 		staminaRegenTimer.Connect("timeout", new Callable(this, nameof(RegenerateStamina)));
 		staminaRegenTimer.Start();
 
@@ -147,19 +150,23 @@ public partial class Ram : CharacterBody2D
 		// Update tracker for diagonal movements.
 		if (movingRight && movingUp)
 		{
-			tracker = 5; // up_right
+			// up_right
+			tracker = 5;
 		}
 		else if (movingRight && movingDown)
 		{
-			tracker = 7; // down_right
+			// down_right
+			tracker = 7;
 		}
 		else if (movingLeft && movingUp)
 		{
-			tracker = 6; // up_left
+			// up_left
+			tracker = 6;
 		}
 		else if (movingLeft && movingDown)
 		{
-			tracker = 8; // down_left
+			// down_left
+			tracker = 8;
 		}
 
 		return velocity;
@@ -347,8 +354,8 @@ public partial class Ram : CharacterBody2D
 			// Make sure to set it back to 0, don't need neg health.
 			currentHealth = 0;
 
-			// For now, we print game over, but maybe call ready again? Have to think about it some more. *TODO*
-			GD.Print("Game Over!");
+			// Handle game over logic in UImanager.
+			OnDeath?.Invoke();
 		}
 	}
 
