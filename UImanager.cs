@@ -15,11 +15,11 @@ public partial class UImanager : CanvasLayer
 		health = GetNode<ProgressBar>("HealthBar");
 		stamina = GetNode<ProgressBar>("StaminaBar");
 
-		// BULL SHIT I HAVE NO IDEA WHY IT WAS SO HARD I HATE GODOT
-		ram = GetNode<Ram>("../CharacterBody2D");
-
 		// Get Ram node.
-		ram = GetNode<Ram>("../CharacterBody2D");
+		ram = GetNode<Ram>("../Ram");
+
+		// Adds GameOver method to invocation list of OnDeath event.
+		ram.OnDeath += GameOver;
 
 		// Check to see if healthbar is accurate.
 		ram.TakeDamage(10);
@@ -27,7 +27,6 @@ public partial class UImanager : CanvasLayer
 	//updates health bar to match player health
 	public void updateHealth()
 	{
-
 		healthValue = ram.currentHealth;
 		health.Value = healthValue;
 	}
@@ -44,5 +43,10 @@ public partial class UImanager : CanvasLayer
 		updateHealth();
 		updateStamina();
 
+	}
+
+	private void GameOver()
+	{
+		GD.Print("Ram restarts cycle");
 	}
 }
