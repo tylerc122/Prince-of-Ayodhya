@@ -1,7 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://co0ngvwl806b3"]
+[gd_scene load_steps=12 format=3 uid="uid://co0ngvwl806b3"]
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
-[ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://character_body_2d.tscn" id="1_rwkut"]
+[ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://Ram.tscn" id="1_rwkut"]
+[ext_resource type="PackedScene" uid="uid://dr12kx6g6y6k0" path="res://enemy_basic.tscn" id="2_4jyoq"]
+[ext_resource type="Script" path="res://enemy_basic.cs" id="3_58ydl"]
 [ext_resource type="Script" path="res://UImanager.cs" id="3_bkev8"]
 [ext_resource type="Texture2D" uid="uid://d0n20df6jokiu" path="res://sprites/Health and stamina bars.png" id="4_01oof"]
 
@@ -24,9 +26,12 @@ ProgressBar/styles/fill = SubResource("StyleBoxFlat_tpu45")
 y_sort_enabled = true
 position = Vector2(264, 289)
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("1_rwkut")]
+[node name="Ram" parent="." instance=ExtResource("1_rwkut")]
 position = Vector2(-161, -114)
 scale = Vector2(6.8412, 7.04897)
+
+[node name="Enemy_Basic" parent="." instance=ExtResource("2_4jyoq")]
+script = ExtResource("3_58ydl")
 
 [node name="CharacterBody2D2" type="CharacterBody2D" parent="."]
 position = Vector2(185, 123)
