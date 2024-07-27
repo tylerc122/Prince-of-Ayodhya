@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://co0ngvwl806b3"]
+[gd_scene load_steps=14 format=3 uid="uid://co0ngvwl806b3"]
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
 [ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://Ram.tscn" id="1_rwkut"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://enemy_basic.cs" id="3_58ydl"]
 [ext_resource type="Script" path="res://UImanager.cs" id="3_bkev8"]
 [ext_resource type="Texture2D" uid="uid://d0n20df6jokiu" path="res://sprites/Health and stamina bars.png" id="4_01oof"]
+[ext_resource type="PackedScene" uid="uid://psndtfjkhvqa" path="res://boss_1.tscn" id="4_o3g6m"]
+[ext_resource type="PackedScene" uid="uid://b5bpja4rpgk5r" path="res://shockwave.tscn" id="8_knltm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tg6pq"]
 size = Vector2(123, 123)
@@ -32,6 +34,8 @@ scale = Vector2(6.8412, 7.04897)
 
 [node name="Enemy_Basic" parent="." instance=ExtResource("2_4jyoq")]
 script = ExtResource("3_58ydl")
+
+[node name="Boss_1" parent="." instance=ExtResource("4_o3g6m")]
 
 [node name="CharacterBody2D2" type="CharacterBody2D" parent="."]
 position = Vector2(185, 123)
@@ -120,3 +124,5 @@ texture_filter = 1
 position = Vector2(1026, 35)
 scale = Vector2(7.75, 5.16667)
 texture = ExtResource("4_01oof")
+
+[node name="Shockwave" parent="." instance=ExtResource("8_knltm")]
