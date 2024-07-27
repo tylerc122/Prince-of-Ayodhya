@@ -161,14 +161,46 @@ public partial class Boss_1 : CharacterBody2D
 			// Then it'll add the instance of the shockwave as a child of the parent, making it active & visible in game.
 			GetParent().AddChild(shockwaveInstance);
 
+			Vector2 directionToRam = (ram.GlobalPosition - GlobalPosition).Normalized();
+
 			// We then call StartShockwave() in shockwave.cs which starts the actual movement of the shockwave. 
-			// NOTE: for now I just have the shockwave going right, i'll adjust this later so that it'll be towards Ram(?)
-			shockwaveInstance.Call("StartShockwave", new Vector2(1, 0));
+			shockwaveInstance.Call("StartShockwave", directionToRam);
 		}
 	}
+	// Boulder throw attack.
 	private void BoulderThrowLogic()
 	{
+		// Same thing as shockwave.
+		PackedScene boulderScene = (PackedScene)ResourceLoader.Load("res://boulder.tscn");
 
+		// Make sure loaded properly.
+		if (boulderScene != null)
+		{
+			// Create an instance of the boulder, unlike the shockwave, we need this to be a RigidBody2D since we're dealing with physics & gravity.
+			RigidBody2D boulderInstance = (RigidBody2D)boulderScene.Instantiate();
+
+			// Starts at the boss.
+			boulderInstance.GlobalPosition = GlobalPosition;
+
+			// Make it visible and active in game.
+			GetParent().AddChild(boulderInstance);
+
+			// Initialize & assign directionToRam, need to make sure we're throwing boulder at ram.
+			Vector2 directionToRam = (ram.GlobalPosition - GlobalPosition).Normalized();
+
+			// Speed of boulder.
+			float boulderSpeed = 300.0f;
+
+			// Sets velocity of boulder.
+			// NOTE: we can change the logic of this to have an arc instead of it just going straight across the screen, we'll
+			// see how it looks in game then adjust if necessary:
+			// CODE IF WE WANT AN ARC/GRAVITY PHYSICS:
+			// float angle = Mathf.Atan2(directionToRam.y, directionToRam.x); // Calculates angle towards Ram.
+			// float initialSpeedx = boulderSpeed * Mathf.Cos(angle);
+			// float initialSpeedy = boulderSpeed * Mathf.Sin(angle) - 50.0f;
+
+			boulderInstance.LinearVelocity = directionToRam * boulderSpeed;
+		}
 	}
 	private void StompAttackLogic()
 	{
