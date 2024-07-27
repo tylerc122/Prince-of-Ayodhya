@@ -102,7 +102,9 @@ public partial class Boss_1 : CharacterBody2D
 		// Reset attack timer once attack is performed.
 		attackTimer = 2;
 	}
-
+	/// Executes the attack by setting current attack, playing anim, & calling PerformAttack()
+	/// @param attackName the name of the attack chosen from ChooseAttack()
+	/// @param animationName the name of the animation corresponding with the attack.
 	private void ExecuteAttack(string attackName, string animationName)
 	{
 		GD.Print(attackName);
@@ -110,7 +112,7 @@ public partial class Boss_1 : CharacterBody2D
 		animatedSprite.Play(animationName);
 		PerformAttack();
 	}
-	// *TODO* All logic of attacks
+	// Performs the logic of the attack based on the currentAttack.
 	private void PerformAttack()
 	{
 		switch (currentAttack)
@@ -129,24 +131,38 @@ public partial class Boss_1 : CharacterBody2D
 				break;
 		}
 	}
+	/// Slam attack.
 	private void SlamAttackLogic()
 	{
+		// If Ram is range for the intial slamdown
 		if (IsRamInAttackRange(50.0f))
 		{
+			// He takes 20 damage.
 			ram.TakeDamage(20);
 		}
-
+		// Either way, the shockwave will be created.
 		CreateShockwave();
 	}
+	// The actual creation of the shockwave from the slam.
 	private void CreateShockwave()
 	{
+		// Loads a resource form the shockwave scene, we must cast to a 'PackedScene' since we'll get a 'Resource' object if we don't.
 		PackedScene shockwaveScene = (PackedScene)ResourceLoader.Load("res://shockwave.tscn)");
+		// Succesfully loaded?
 		if (shockwaveScene != null)
 		{
+			// If yes, create an instance of the PackedScene. Casting to Area2D
 			Area2D shockwaveInstance = (Area2D)shockwaveScene.Instantiate();
+
+			// This will make sure that the shockwave starts where the boss is.
 			shockwaveInstance.Position = GlobalPosition;
+
+			// Gets the parent of the Boss_1 node, should just be the root node (Node2D)
+			// Then it'll add the instance of the shockwave as a child of the parent, making it active & visible in game.
 			GetParent().AddChild(shockwaveInstance);
 
+			// We then call StartShockwave() in shockwave.cs which starts the actual movement of the shockwave. 
+			// NOTE: for now I just have the shockwave going right, i'll adjust this later so that it'll be towards Ram(?)
 			shockwaveInstance.Call("StartShockwave", new Vector2(1, 0));
 		}
 	}
