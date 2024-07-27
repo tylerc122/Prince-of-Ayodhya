@@ -81,26 +81,35 @@ public partial class Boss_1 : CharacterBody2D
 	/// Don't think I need to say what this will do.
 	private void ChooseAttack()
 	{
-		// Make use of our random var that we initialized earlier.
-		int attackChoice = random.Next(4);
-		// Switch expression. Will chooose attack based on number.
-		switch (attackChoice)
+		// May need to adjust delta/speed, again, have to see in game.
+		// Either way we need to move towards ram before an attack is chosen.
+		MoveTowardsRam(100.0f, 0.1f);
+
+		// We should only choose, execute, and perform the attack once Ram is close enough.
+		// Range is subject to change.
+		if (IsRamInAttackRange(200.0f))
 		{
-			case 0:
-				ExecuteAttack("SlamAttack", "SlamAttack");
-				break;
-			case 1:
-				ExecuteAttack("BoulderThrow", "BoulderThrow");
-				break;
-			case 2:
-				ExecuteAttack("StompAttack", "StompAttack");
-				break;
-			case 3:
-				ExecuteAttack("ChargeAttack", "ChargeAttack");
-				break;
+			// Make use of our random var that we initialized earlier.
+			int attackChoice = random.Next(4);
+			// Switch expression. Will chooose attack based on number.
+			switch (attackChoice)
+			{
+				case 0:
+					ExecuteAttack("SlamAttack", "SlamAttack");
+					break;
+				case 1:
+					ExecuteAttack("BoulderThrow", "BoulderThrow");
+					break;
+				case 2:
+					ExecuteAttack("StompAttack", "StompAttack");
+					break;
+				case 3:
+					ExecuteAttack("ChargeAttack", "ChargeAttack");
+					break;
+			}
+			// Reset attack timer once attack is performed.
+			attackTimer = 2;
 		}
-		// Reset attack timer once attack is performed.
-		attackTimer = 2;
 	}
 	/// Executes the attack by setting current attack, playing anim, & calling PerformAttack()
 	/// @param attackName the name of the attack chosen from ChooseAttack()
@@ -115,6 +124,9 @@ public partial class Boss_1 : CharacterBody2D
 	// Performs the logic of the attack based on the currentAttack.
 	private void PerformAttack()
 	{
+		// Since we now have the boss moving towards ram before attacking,
+		// we need them to stop when they do the attack.
+		Velocity = Vector2.Zero;
 		switch (currentAttack)
 		{
 			case "SlamAttack":
@@ -246,4 +258,10 @@ public partial class Boss_1 : CharacterBody2D
 		}
 	}
 
+	private void MoveTowardsRam(float speed, float delta)
+	{
+		Vector2 directionToRam = (ram.GlobalPosition - GlobalPosition).Normalized();
+		Velocity = directionToRam * speed;
+		MoveAndSlide();
+	}
 }
