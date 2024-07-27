@@ -27,6 +27,7 @@ public partial class Boss_1 : CharacterBody2D
 	// Nodes
 	private AnimatedSprite2D animatedSprite;
 	private Area2D attackArea;
+	private Ram ram;
 
 	// Random variable for choosing attacks.
 	private Random random = new Random();
@@ -74,7 +75,6 @@ public partial class Boss_1 : CharacterBody2D
 			// If in an Enraged State
 			case BossState.Enraged:
 				// Perform an enraged attack.
-				PerformEnragedAttack();
 				break;
 		}
 	}
@@ -82,64 +82,33 @@ public partial class Boss_1 : CharacterBody2D
 	private void ChooseAttack()
 	{
 		// Make use of our random var that we initialized earlier.
-		int rand = random.Next(0, 4);
+		int attackChoice = random.Next(4);
 		// Switch expression. Will chooose attack based on number.
-		switch (rand)
+		switch (attackChoice)
 		{
 			case 0:
-				SlamAttack();
+				ExecuteAttack("SlamAttack", "SlamAttack");
 				break;
 			case 1:
-				BoulderThrow();
+				ExecuteAttack("BoulderThrow", "BoulderThrow");
 				break;
 			case 2:
-				StompAttack();
+				ExecuteAttack("StompAttack", "StompAttack");
 				break;
 			case 3:
-				ChargeAttack();
+				ExecuteAttack("ChargeAttack", "ChargeAttack");
 				break;
 		}
 		// Reset attack timer once attack is performed.
 		attackTimer = 2;
 	}
 
-	/// The next four functions are very similar so I will blanket with one summary
-	/// Once called, will update currentAttack, play the animation, and then "perform" the attack.
-	// Note: I feel that perform is the wrong word, when I say perform I really mean the part that actually does damage,
-	// The animation will be carried out but "performing" the attack in this case is the logic and the actual damage being dealt.
-	private void SlamAttack()
+	private void ExecuteAttack(string attackName, string animationName)
 	{
-		GD.Print("Slam Attack");
-		currentAttack = "SlamAttack";
-		animatedSprite.Play("SlamAttack");
+		GD.Print(attackName);
+		currentAttack = attackName;
+		animatedSprite.Play(animationName);
 		PerformAttack();
-	}
-	private void BoulderThrow()
-	{
-		GD.Print("Boulder Throw");
-		currentAttack = "BoulderThrow";
-		animatedSprite.Play("BoulderThrow");
-		PerformAttack();
-	}
-
-	private void StompAttack()
-	{
-		GD.Print("Stomp Attack");
-		currentAttack = "StompAttack";
-		animatedSprite.Play("StompAttack");
-		PerformAttack();
-	}
-
-	private void ChargeAttack()
-	{
-		GD.Print("Charge Attack");
-		currentAttack = "ChargeAttack";
-		animatedSprite.Play("ChargeAttack");
-		PerformAttack();
-	}
-	private void PerformEnragedAttack()
-	{
-		// NOT doin allat
 	}
 	// *TODO* All logic of attacks
 	private void PerformAttack()
@@ -147,16 +116,56 @@ public partial class Boss_1 : CharacterBody2D
 		switch (currentAttack)
 		{
 			case "SlamAttack":
+				SlamAttackLogic();
 				break;
 			case "BoulderThrow":
+				BoulderThrowLogic();
 				break;
 			case "StompAttack":
+				StompAttackLogic();
 				break;
 			case "ChargeAttack":
+				ChargeAttackLogic();
 				break;
 		}
 	}
+	private void SlamAttackLogic()
+	{
+		if (IsRamInAttackRange(50.0f))
+		{
+			ram.TakeDamage(20);
+		}
 
+		CreateShockwave();
+	}
+	private void CreateShockwave()
+	{
+		PackedScene shockwaveScene = (PackedScene)ResourceLoader.Load("res://shockwave.tscn)");
+		if (shockwaveScene != null)
+		{
+			Area2D shockwaveInstance = (Area2D)shockwaveScene.Instantiate();
+			shockwaveInstance.Position = GlobalPosition;
+			GetParent().AddChild(shockwaveInstance);
+
+			shockwaveInstance.Call("StartShockwave", new Vector2(1, 0));
+		}
+	}
+	private void BoulderThrowLogic()
+	{
+
+	}
+	private void StompAttackLogic()
+	{
+
+	}
+	private void ChargeAttackLogic()
+	{
+
+	}
+	private bool IsRamInAttackRange(float attackRange)
+	{
+		return (ram.GlobalPosition - GlobalPosition).Length() <= attackRange;
+	}
 	// Called when Ram performs a successful attack, currently not in use, but self explanatory.
 	public void OnHealthChanged(int newHealth)
 	{
