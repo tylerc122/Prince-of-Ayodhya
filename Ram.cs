@@ -22,6 +22,11 @@ public partial class Ram : CharacterBody2D
 	private bool isRolling = false;
 	private Godot.Vector2 rollDirection;
 
+	// Knockback variables
+	private Godot.Vector2 knockbackVelocity = Godot.Vector2.Zero;
+	private float knockbackDuration = 0.2f;
+	private float knockbackTimer = 0;
+
 	// Nodes
 	private AnimatedSprite2D animatedSprite2D;
 	private CollisionShape2D collisionShape2D;
@@ -62,6 +67,17 @@ public partial class Ram : CharacterBody2D
 	/// @param delta time elapsed since the last frame was processed.
 	public override void _PhysicsProcess(double delta)
 	{
+		if (knockbackTimer > 0)
+		{
+			// Reduce the knockback timer.
+			knockbackTimer -= (float)delta;
+
+			Velocity = knockbackVelocity;
+
+			MoveAndSlide();
+
+			return;
+		}
 		// Before we do any kind of idle/walking animation, we must check if we are currently in a roll state.
 		if (isRolling)
 		{
@@ -389,5 +405,10 @@ public partial class Ram : CharacterBody2D
 				currentStamina = maxStamina;
 			}
 		}
+	}
+	public void ApplyKnockback(Godot.Vector2 direction, float force)
+	{
+		knockbackVelocity = direction * force;
+		knockbackTimer = knockbackDuration;
 	}
 }
