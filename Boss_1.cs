@@ -216,7 +216,29 @@ public partial class Boss_1 : CharacterBody2D
 	}
 	private void StompAttackLogic()
 	{
+		if (IsRamInAttackRange(100.0f))
+		{
+			ram.TakeDamage(15);
+			Vector2 knockbackDirection = (ram.GlobalPosition - GlobalPosition).Normalized();
+			ram.ApplyKnockback(knockbackDirection, 200.0f);
 
+		}
+		CreateStompEffect();
+	}
+
+	private void CreateStompEffect()
+	{
+		PackedScene stompScene = (PackedScene)ResourceLoader.Load("res://stomp.tscn");
+		if (stompScene != null)
+		{
+			Area2D stompInstance = (Area2D)stompScene.Instantiate();
+
+			stompInstance.Position = GlobalPosition;
+
+			GetParent().AddChild(stompInstance);
+
+			stompInstance.Call("StartStompEffect");
+		}
 	}
 	private void ChargeAttackLogic()
 	{
