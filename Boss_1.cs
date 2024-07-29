@@ -214,18 +214,25 @@ public partial class Boss_1 : CharacterBody2D
 			boulderInstance.LinearVelocity = directionToRam * boulderSpeed;
 		}
 	}
+
+	/// Stomp attack.
 	private void StompAttackLogic()
 	{
+		// Check if ram is in range.
 		if (IsRamInAttackRange(100.0f))
 		{
+			// If he is, he'll take 15 damage.
 			ram.TakeDamage(15);
+			// He will also be knocked back
 			Vector2 knockbackDirection = (ram.GlobalPosition - GlobalPosition).Normalized();
 			ram.ApplyKnockback(knockbackDirection, 200.0f);
 
 		}
+		// Then we create the stomping effect.
 		CreateStompEffect();
 	}
 
+	/// Similar to all other attacks. However, need to add animation later.
 	private void CreateStompEffect()
 	{
 		PackedScene stompScene = (PackedScene)ResourceLoader.Load("res://stomp.tscn");
@@ -244,6 +251,9 @@ public partial class Boss_1 : CharacterBody2D
 	{
 
 	}
+	/// Called when we want to check if ram is in the boss's attack range
+	/// @param attackRange the range of the specific attack.
+	/// @return bool the truth value of whether or not ram is within range or not.
 	private bool IsRamInAttackRange(float attackRange)
 	{
 		return (ram.GlobalPosition - GlobalPosition).Length() <= attackRange;

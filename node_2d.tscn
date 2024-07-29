@@ -37,6 +37,8 @@ script = ExtResource("3_58ydl")
 
 [node name="Boss_1" parent="." instance=ExtResource("4_o3g6m")]
 
+[node name="Shockwave" parent="." instance=ExtResource("8_knltm")]
+
 [node name="CharacterBody2D2" type="CharacterBody2D" parent="."]
 position = Vector2(185, 123)
 metadata/_edit_group_ = true
@@ -124,5 +126,3 @@ texture_filter = 1
 position = Vector2(1026, 35)
 scale = Vector2(7.75, 5.16667)
 texture = ExtResource("4_01oof")
-
-[node name="Shockwave" parent="." instance=ExtResource("8_knltm")]
