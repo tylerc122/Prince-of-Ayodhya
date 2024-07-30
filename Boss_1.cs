@@ -221,7 +221,6 @@ public partial class Boss_1 : CharacterBody2D
 			// float initialSpeedx = boulderSpeed * Mathf.Cos(angle);
 			// float initialSpeedy = boulderSpeed * Mathf.Sin(angle) - 50.0f;
 
-
 		}
 	}
 
