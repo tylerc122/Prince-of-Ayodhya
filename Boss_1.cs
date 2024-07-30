@@ -22,7 +22,8 @@ public partial class Boss_1 : CharacterBody2D
 	private int health;
 	private float attackTimer = 0;
 
-
+	float enragedDamageMultiplier = 2.0f;
+	float enragedSpeedMultiplier = 1.5f;
 
 	// Nodes
 	private AnimatedSprite2D animatedSprite;
@@ -37,8 +38,12 @@ public partial class Boss_1 : CharacterBody2D
 	public override void _Ready()
 	{
 		health = MaxHealth;
+
 		animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
 		attackArea = GetNode<Area2D>("Area2D");
+
+		ram = GetNode<Ram>("Ram");
 
 		animatedSprite.Connect("animation_finished", new Callable(this, nameof(OnAnimationFinished)));
 	}
@@ -69,12 +74,12 @@ public partial class Boss_1 : CharacterBody2D
 			// If in Attack state
 			case BossState.Attack:
 				// Perform the attack.
-				PerformAttack();
+				PerformAttack(1.0f, 1.0f);
 				break;
 
 			// If in an Enraged State
 			case BossState.Enraged:
-				// Perform an enraged attack.
+				PerformAttack(enragedDamageMultiplier, enragedSpeedMultiplier);
 				break;
 		}
 	}
@@ -117,12 +122,15 @@ public partial class Boss_1 : CharacterBody2D
 	private void ExecuteAttack(string attackName, string animationName)
 	{
 		GD.Print(attackName);
+
 		currentAttack = attackName;
+
 		animatedSprite.Play(animationName);
-		PerformAttack();
+
+		PerformAttack(1.0f, 1.0f);
 	}
 	// Performs the logic of the attack based on the currentAttack.
-	private void PerformAttack()
+	private void PerformAttack(float damageMultiplier, float speedMultiplier)
 	{
 		// Since we now have the boss moving towards ram before attacking,
 		// we need them to stop when they do the attack.
@@ -130,27 +138,28 @@ public partial class Boss_1 : CharacterBody2D
 		switch (currentAttack)
 		{
 			case "SlamAttack":
-				SlamAttackLogic();
+				SlamAttackLogic(damageMultiplier);
 				break;
 			case "BoulderThrow":
-				BoulderThrowLogic();
+				BoulderThrowLogic(damageMultiplier);
 				break;
 			case "StompAttack":
-				StompAttackLogic();
+				StompAttackLogic(damageMultiplier);
 				break;
 			case "ChargeAttack":
-				ChargeAttackLogic();
+				ChargeAttackLogic(damageMultiplier);
 				break;
 		}
 	}
+
 	/// Slam attack.
-	private void SlamAttackLogic()
+	private void SlamAttackLogic(float damageMultiplier)
 	{
 		// If Ram is range for the intial slamdown
 		if (IsRamInAttackRange(50.0f))
 		{
 			// He takes 20 damage.
-			ram.TakeDamage(20);
+			ram.TakeDamage((int)(20 * damageMultiplier));
 		}
 		// Either way, the shockwave will be created.
 		CreateShockwave();
@@ -180,7 +189,7 @@ public partial class Boss_1 : CharacterBody2D
 		}
 	}
 	// Boulder throw attack.
-	private void BoulderThrowLogic()
+	private void BoulderThrowLogic(float damageMultiplier)
 	{
 		// Same thing as shockwave.
 		PackedScene boulderScene = (PackedScene)ResourceLoader.Load("res://boulder.tscn");
@@ -204,6 +213,7 @@ public partial class Boss_1 : CharacterBody2D
 			float boulderSpeed = 300.0f;
 
 			// Sets velocity of boulder.
+			boulderInstance.LinearVelocity = directionToRam * boulderSpeed;
 			// NOTE: we can change the logic of this to have an arc instead of it just going straight across the screen, we'll
 			// see how it looks in game then adjust if necessary:
 			// CODE IF WE WANT AN ARC/GRAVITY PHYSICS:
@@ -211,18 +221,18 @@ public partial class Boss_1 : CharacterBody2D
 			// float initialSpeedx = boulderSpeed * Mathf.Cos(angle);
 			// float initialSpeedy = boulderSpeed * Mathf.Sin(angle) - 50.0f;
 
-			boulderInstance.LinearVelocity = directionToRam * boulderSpeed;
+
 		}
 	}
 
 	/// Stomp attack.
-	private void StompAttackLogic()
+	private void StompAttackLogic(float damageMultiplier)
 	{
 		// Check if ram is in range.
 		if (IsRamInAttackRange(100.0f))
 		{
 			// If he is, he'll take 15 damage.
-			ram.TakeDamage(15);
+			ram.TakeDamage((int)(15 * damageMultiplier));
 			// He will also be knocked back
 			Vector2 knockbackDirection = (ram.GlobalPosition - GlobalPosition).Normalized();
 			ram.ApplyKnockback(knockbackDirection, 200.0f);
@@ -247,9 +257,16 @@ public partial class Boss_1 : CharacterBody2D
 			stompInstance.Call("StartStompEffect");
 		}
 	}
-	private void ChargeAttackLogic()
+	private void ChargeAttackLogic(float damageMultiplier)
 	{
+		float chargeSpeed = 500.0f;
 
+		MoveTowardsRam(chargeSpeed, (float)GetProcessDeltaTime());
+
+		if (IsRamInAttackRange(30.0f))
+		{
+			ram.TakeDamage((int)(25 * damageMultiplier));
+		}
 	}
 	/// Called when we want to check if ram is in the boss's attack range
 	/// @param attackRange the range of the specific attack.
@@ -272,6 +289,7 @@ public partial class Boss_1 : CharacterBody2D
 			Die();
 		}
 	}
+	/// Called when the boss die.
 	private void Die()
 	{
 		GD.Print("Boss Died");
