@@ -3,25 +3,29 @@ using System;
 using System.Collections;
 /// <summary>
 /// SO I DONT FORGET HOW THIS WORKS:
-/// When an attack is chosen, the state transitions from 'Idle' to 'Attack'
-/// Each specific attack method will set the 'currentAttack' and then play the associated animation
-/// When the animation plays, it will call the 'PerformAttack' method, which will (eventually) execute the logic of the attack
-/// Then when the animation finishes, 'OnAnimationFinished' is called and the boss state will go back to idle.
-/// Moreover, when the bosses health reaches 25% or under, (s)he will enter an enraged mode, we can just speed up attacks and/or make them do more damage.
-/// </summary>
+/// First, the boss starts in an Idle state, health is set to 100 (max) and the attack timer starts at zero.
+/// When the boss spawns in, attack timer is zero so immediately we will proceed to choose an attack.
+/// The boss then moves twoardss ram using MoveTowardsRam().
+/// Once ram is in attack range, IsRamInAttackRange() returns true, which then means a random attack is chosen.
+/// This means that ExecuteAttack() is called, the attack name and animation name are set and the currentAttack is set to wtvr the attack is, the animation is also played & state is changed to attack.
+/// During the next _PhysicsProcess() call, the boss is now an attack state so PerformAttack() will be called with normal multipliers.
+/// Perform attack then checks currentAttack and calls the corresponding method.
+/// When the animation is finished, OnAnimationFinished() is called and the boss goes back to idle, unless under 25 hp, then it will stay in enraged mode.
+/// /// </summary>
 
 public partial class Boss_1 : CharacterBody2D
 {
-	// Stores boss states.
+	// Stores boss states
 	enum BossState { Idle, Attack, Enraged }
-	// Initially in Idle state.
+	// Initially in Idle state
 	private BossState state = BossState.Idle;
 
-	// Basic attributes.
+	// Basic attributes
 	public int MaxHealth = 100;
 	private int health;
 	private float attackTimer = 0;
 
+	// Enraged multipliers
 	float enragedDamageMultiplier = 2.0f;
 	float enragedSpeedMultiplier = 1.5f;
 
@@ -37,6 +41,7 @@ public partial class Boss_1 : CharacterBody2D
 
 	public override void _Ready()
 	{
+		// Assign attributes & nodes on ready
 		health = MaxHealth;
 
 		animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
@@ -45,6 +50,7 @@ public partial class Boss_1 : CharacterBody2D
 
 		ram = GetNode<Ram>("Ram");
 
+		// Once animation finished, called OnAnimationFinished()
 		animatedSprite.Connect("animation_finished", new Callable(this, nameof(OnAnimationFinished)));
 	}
 	public override void _PhysicsProcess(double delta)
@@ -73,17 +79,18 @@ public partial class Boss_1 : CharacterBody2D
 
 			// If in Attack state
 			case BossState.Attack:
-				// Perform the attack.
+				// Perform the attack with no multiplier.
 				PerformAttack(1.0f, 1.0f);
 				break;
 
 			// If in an Enraged State
 			case BossState.Enraged:
+				// Perform the attack with the enraged multipliers.
 				PerformAttack(enragedDamageMultiplier, enragedSpeedMultiplier);
 				break;
 		}
 	}
-	/// Don't think I need to say what this will do.
+	/// After moving towards ram, boss_1 will choose an attack at random.
 	private void ChooseAttack()
 	{
 		// May need to adjust delta/speed, again, have to see in game.
@@ -127,7 +134,7 @@ public partial class Boss_1 : CharacterBody2D
 
 		animatedSprite.Play(animationName);
 
-		PerformAttack(1.0f, 1.0f);
+		state = BossState.Attack;
 	}
 	// Performs the logic of the attack based on the currentAttack.
 	private void PerformAttack(float damageMultiplier, float speedMultiplier)
@@ -241,7 +248,7 @@ public partial class Boss_1 : CharacterBody2D
 		CreateStompEffect();
 	}
 
-	/// Similar to all other attacks. However, need to add animation later.
+	/// Similar to all other attacks.
 	private void CreateStompEffect()
 	{
 		PackedScene stompScene = (PackedScene)ResourceLoader.Load("res://stomp.tscn");
@@ -297,16 +304,23 @@ public partial class Boss_1 : CharacterBody2D
 	// Called when an attacking(?) animation is carried out in full.
 	private void OnAnimationFinished()
 	{
-		// Sets state back to idle if in attack
-		// Note: A little confused by my own code, in what case would an animation be carried out while not in Attack mode?
-		// Furthermore, do we not set the bosses state back to idle when we're in an enraged state? 
-		// I'll revisit this tmrw.
+		// If we're in attack state.
 		if (state == BossState.Attack)
 		{
-			state = BossState.Idle;
+			// Check if the health is above 25
+			if (health > 25)
+			{
+				// If it is, we go back to idle.
+				state = BossState.Idle;
+			}
+			else
+			{
+				// If it isn't go back to enraged.
+				state = BossState.Enraged;
+			}
 		}
 	}
-
+	/// Makes the boss move towards ram.
 	private void MoveTowardsRam(float speed, float delta)
 	{
 		Vector2 directionToRam = (ram.GlobalPosition - GlobalPosition).Normalized();
