@@ -4,14 +4,14 @@ using System.Collections;
 /// <summary>
 /// SO I DONT FORGET HOW THIS WORKS:
 /// First, the boss starts in an Idle state, health is set to 100 (max) and the attack timer starts at zero.
-/// When the boss spawns in, attack timer is zero so immediately we will proceed to choose an attack.
-/// The boss then moves twoardss ram using MoveTowardsRam().
+/// When the boss spawns in, attack timer is zero so immediately they will proceed to choose an attack.
+/// The boss then moves towards ram using MoveTowardsRam().
 /// Once ram is in attack range, IsRamInAttackRange() returns true, which then means a random attack is chosen.
 /// This means that ExecuteAttack() is called, the attack name and animation name are set and the currentAttack is set to wtvr the attack is, the animation is also played & state is changed to attack.
 /// During the next _PhysicsProcess() call, the boss is now an attack state so PerformAttack() will be called with normal multipliers.
 /// Perform attack then checks currentAttack and calls the corresponding method.
 /// When the animation is finished, OnAnimationFinished() is called and the boss goes back to idle, unless under 25 hp, then it will stay in enraged mode.
-/// /// </summary>
+/// </summary>
 
 public partial class Boss_1 : CharacterBody2D
 {
@@ -252,6 +252,7 @@ public partial class Boss_1 : CharacterBody2D
 	private void CreateStompEffect()
 	{
 		PackedScene stompScene = (PackedScene)ResourceLoader.Load("res://stomp.tscn");
+
 		if (stompScene != null)
 		{
 			Area2D stompInstance = (Area2D)stompScene.Instantiate();
