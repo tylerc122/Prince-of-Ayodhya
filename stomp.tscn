@@ -1,9 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://2i07r4x17v6b"]
-
-[ext_resource type="Script" path="res://stomp.cs" id="1_58x5g"]
+[gd_scene format=3 uid="uid://2i07r4x17v6b"]
 
 [node name="Stomp" type="Area2D"]
-script = ExtResource("1_58x5g")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 
