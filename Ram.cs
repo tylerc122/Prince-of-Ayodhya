@@ -406,6 +406,7 @@ public partial class Ram : CharacterBody2D
 			}
 		}
 	}
+	/// Called when Ram needs to be knocked back.
 	public void ApplyKnockback(Godot.Vector2 direction, float force)
 	{
 		knockbackVelocity = direction * force;
