@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://b5bpja4rpgk5r"]
 
-[ext_resource type="Script" path="res://shockwave.cs" id="1_x5dno"]
+[ext_resource type="Script" path="res://shockwave.cs" id="1_1lbak"]
 
 [node name="Shockwave" type="Area2D"]
-script = ExtResource("1_x5dno")
+script = ExtResource("1_1lbak")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 
