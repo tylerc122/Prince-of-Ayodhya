@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://clqsgxole247v"]
+
+[node name="EnemyBase" type="CharacterBody2D"]

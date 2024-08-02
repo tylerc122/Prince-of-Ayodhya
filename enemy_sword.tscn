@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkuud4p7sd5hr"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_46lel"]
+
+[node name="EnemySword" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_46lel")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="AttackRange" type="CollisionShape2D" parent="Area2D"]
