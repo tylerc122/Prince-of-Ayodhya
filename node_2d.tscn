@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
 [ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://Ram.tscn" id="1_rwkut"]
-[ext_resource type="PackedScene" uid="uid://dr12kx6g6y6k0" path="res://enemy_basic.tscn" id="2_4jyoq"]
+[ext_resource type="PackedScene" uid="uid://dkuud4p7sd5hr" path="res://enemy_sword.tscn" id="2_4jyoq"]
 [ext_resource type="Script" path="res://PowerUpManager.cs" id="2_iy3c1"]
 [ext_resource type="Script" path="res://enemy_basic.cs" id="3_58ydl"]
 [ext_resource type="Script" path="res://UImanager.cs" id="3_bkev8"]
