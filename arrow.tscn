@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://4480gtedv0c7"]
+
+[ext_resource type="Script" path="res://Arrow.cs" id="1_fys4s"]
+
+[node name="Arrow" type="Area2D"]
+script = ExtResource("1_fys4s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
