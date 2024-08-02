@@ -27,6 +27,11 @@ public partial class Ram : CharacterBody2D
 	private float knockbackDuration = 0.2f;
 	private float knockbackTimer = 0;
 
+	// Invincibility variables
+	private bool isInvincible = false;
+	private float invincibilityDuration = 0.5f;
+	private Timer invincibiltyTimer;
+
 	// Nodes
 	private AnimatedSprite2D animatedSprite2D;
 	private CollisionShape2D collisionShape2D;
@@ -61,6 +66,12 @@ public partial class Ram : CharacterBody2D
 
 		// Initially idle
 		animatedSprite2D.Play("idle_right");
+
+		invincibiltyTimer = new Timer();
+		invincibiltyTimer.OneShot = true;
+		invincibiltyTimer.WaitTime = invincibilityDuration;
+		staminaRegenTimer.Connect("timeout", new Callable(this, nameof(ResetInvIncibility)));
+
 	}
 
 	/// _PhysicsProcess will handle walking/idle animations as well as basic cardinal (and possibly ordinal) movement.
@@ -361,6 +372,10 @@ public partial class Ram : CharacterBody2D
 	/// @param amount the amount of damage Ram takes.
 	public void TakeDamage(int amount)
 	{
+		if (isInvincible)
+		{
+			return;
+		}
 		// Take away the damage taken from current health.
 		currentHealth -= amount;
 
@@ -373,6 +388,14 @@ public partial class Ram : CharacterBody2D
 			// Handle game over logic in UImanager.
 			OnDeath?.Invoke();
 		}
+		isInvincible = true;
+		invincibiltyTimer.Start();
+	}
+
+	// Resets invincibility after hit.
+	private void ResetInvIncibility()
+	{
+		isInvincible = false;
 	}
 
 	/// Called when Ram picks up a healing item.
