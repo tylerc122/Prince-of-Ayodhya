@@ -27,7 +27,6 @@ public partial class NPC : CharacterBody2D
 	}
 	public override void _Input(InputEvent @event)
 	{
-		GD.Print($"Player in range: {playerInRange}");
 		if (@event.IsActionPressed("interact") && playerInRange)
 		{
 			GD.Print("Interaction triggered. Showing next dialogue.");
@@ -37,9 +36,8 @@ public partial class NPC : CharacterBody2D
 
 	private void OnAreaEntered(Area2D area)
 	{
-		GD.Print($"Something entered: {area.Name} of type {area.GetType()}");
+
 		var parent = area.GetParent();
-		GD.Print($"Parent node: {parent.Name}, Type: {parent.GetType()}");
 
 		if (parent is Ram)
 		{
@@ -47,10 +45,6 @@ public partial class NPC : CharacterBody2D
 			playerInRange = true;
 			dialogueLabel.Visible = true;
 			dialogueLabel.Text = "[Press 'E' to interact]";
-		}
-		else
-		{
-			GD.Print($"Entered area's parent is not of type Ram: {parent.GetType()}");
 		}
 	}
 	private void OnAreaExited(Area2D area)
