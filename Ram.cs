@@ -37,6 +37,7 @@ public partial class Ram : CharacterBody2D
 	private CollisionShape2D collisionShape2D;
 	private Timer rollTimer;
 	private Timer staminaRegenTimer;
+	private Area2D interactionArea;
 
 	// Event(s)
 	public event Action OnDeath;
@@ -49,6 +50,8 @@ public partial class Ram : CharacterBody2D
 		collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
 		staminaRegenTimer = GetNode<Timer>("StaminaRegenTimer");
 		rollTimer = GetNode<Timer>("RollTimer");
+		invincibiltyTimer = GetNode<Timer>("InvincibilityTimer");
+		interactionArea = GetNode<Area2D>("Area2D");
 
 		// rollTimer properties.
 		rollTimer.WaitTime = roll_duration;
@@ -67,7 +70,6 @@ public partial class Ram : CharacterBody2D
 		// Initially idle
 		animatedSprite2D.Play("idle_right");
 
-		invincibiltyTimer = new Timer();
 		invincibiltyTimer.OneShot = true;
 		invincibiltyTimer.WaitTime = invincibilityDuration;
 		staminaRegenTimer.Connect("timeout", new Callable(this, nameof(ResetInvIncibility)));
@@ -389,6 +391,7 @@ public partial class Ram : CharacterBody2D
 			OnDeath?.Invoke();
 		}
 		isInvincible = true;
+
 		invincibiltyTimer.Start();
 	}
 
@@ -435,4 +438,11 @@ public partial class Ram : CharacterBody2D
 		knockbackVelocity = direction * force;
 		knockbackTimer = knockbackDuration;
 	}
+	public void OnAreaEntered(Area2D area)
+	{
+		GD.Print($"Ram entered area: {area.Name}");
+	}
+
 }
+
+
