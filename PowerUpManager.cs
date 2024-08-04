@@ -2,14 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class PowerUpManager : Node2D
+public partial class PowerUpManager : Node
 {
 	private Ram ram;
 	private List<PowerUp> temporaryPowerUps = new List<PowerUp>();
 	public List<PowerUp> allTemporaryPowerUps = new List<PowerUp>();
 	public override void _Ready()
 	{
-		ram = GetNode<Ram>("Ram");
+		ram = GetNode<Ram>("../Ram");
 		allTemporaryPowerUps.Add(new DamageBoost());
 		allTemporaryPowerUps.Add(new SpeedBoost());
 		allTemporaryPowerUps.Add(new DefenseBoost());
