@@ -1,9 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://co0ngvwl806b3"]
+[gd_scene load_steps=19 format=3 uid="uid://co0ngvwl806b3"]
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
 [ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://Ram.tscn" id="1_rwkut"]
 [ext_resource type="PackedScene" uid="uid://dkuud4p7sd5hr" path="res://enemy_sword.tscn" id="2_4jyoq"]
+[ext_resource type="Texture2D" uid="uid://d236rct8lhm4v" path="res://sprites/Sword.png" id="2_duh0n"]
 [ext_resource type="Script" path="res://PowerUpManager.cs" id="2_iy3c1"]
+[ext_resource type="Script" path="res://Weapon_Axis.cs" id="2_wh3ln"]
 [ext_resource type="Script" path="res://UImanager.cs" id="3_bkev8"]
 [ext_resource type="Texture2D" uid="uid://d0n20df6jokiu" path="res://sprites/Health and stamina bars.png" id="4_01oof"]
 [ext_resource type="PackedScene" uid="uid://b5bpja4rpgk5r" path="res://shockwave.tscn" id="8_knltm"]
@@ -36,8 +38,26 @@ y_sort_enabled = true
 position = Vector2(264, 289)
 
 [node name="Ram" parent="." instance=ExtResource("1_rwkut")]
+y_sort_enabled = true
 position = Vector2(-158.64, -99.93)
 scale = Vector2(6.8412, 7.04897)
+
+[node name="Weapon_Axis" type="Marker2D" parent="Ram"]
+y_sort_enabled = true
+script = ExtResource("2_wh3ln")
+
+[node name="Handle_Axis" type="Marker2D" parent="Ram/Weapon_Axis"]
+y_sort_enabled = true
+position = Vector2(5.35579, 3.96228)
+
+[node name="Sword" type="Sprite2D" parent="Ram/Weapon_Axis/Handle_Axis"]
+texture_filter = 1
+position = Vector2(0, -6.38391)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_duh0n")
+
+[node name="Attack_Timer" type="Timer" parent="Ram/Weapon_Axis"]
+process_callback = 0
 
 [node name="NPC" type="CharacterBody2D" parent="."]
 script = ExtResource("10_b3ab5")
@@ -174,3 +194,5 @@ script = ExtResource("10_2dbvd")
 [node name="PowerUpOption2" type="Node2D" parent="Shrine"]
 
 [node name="PowerUpOption3" type="Node2D" parent="Shrine"]
+
+[connection signal="timeout" from="Ram/Weapon_Axis/Attack_Timer" to="Ram/Weapon_Axis" method="_on_attack_timer_timout"]
