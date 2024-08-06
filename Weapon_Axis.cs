@@ -11,6 +11,8 @@ public partial class Weapon_Axis : Marker2D
 
 	private Sprite2D Sword;
 
+	private bool cooldown = true;
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -25,9 +27,10 @@ public partial class Weapon_Axis : Marker2D
 	{
 		LookAt(GetGlobalMousePosition());
 
-		if (Input.IsActionPressed("click")){
+		if (Input.IsActionPressed("click") && cooldown){
 			marker2D.RotationDegrees = 180;
 			Attack_Timer.Start();
+			cooldown = false;
 			
 		}
 		if (this.RotationDegrees >= 90 && this.RotationDegrees <= 270 || this.RotationDegrees <= -90 && this.RotationDegrees >= -270){
@@ -47,6 +50,7 @@ public partial class Weapon_Axis : Marker2D
 	}
 	public void _on_attack_timer_timout(){
 		marker2D.RotationDegrees = 0;
+		cooldown = true;
 	}
 }
 	
