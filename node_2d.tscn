@@ -80,12 +80,12 @@ rotation = -3.14159
 scale = Vector2(1.60104, 1.04385)
 shape = SubResource("RectangleShape2D_2pd0j")
 
-[node name="Label" type="Label" parent="NPC"]
-offset_left = 30.0
-offset_top = 217.0
-offset_right = 204.0
-offset_bottom = 299.0
-scale = Vector2(1.59, 1.42985)
+[node name="RichTextLabel" type="RichTextLabel" parent="NPC"]
+offset_left = 6.0
+offset_top = 119.0
+offset_right = 493.0
+offset_bottom = 200.0
+bbcode_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("3_bkev8")
@@ -126,17 +126,6 @@ script = ExtResource("2_iy3c1")
 [node name="Enemy_Basic" parent="." instance=ExtResource("2_4jyoq")]
 
 [node name="Shockwave" parent="." instance=ExtResource("8_knltm")]
-
-[node name="CharacterBody2D2" type="CharacterBody2D" parent="."]
-position = Vector2(185, 123.64)
-metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D2"]
-texture = ExtResource("1_06drr")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D2"]
-position = Vector2(-1.5, 0.5)
-shape = SubResource("RectangleShape2D_tg6pq")
 
 [node name="CharacterBody2D3" type="CharacterBody2D" parent="."]
 position = Vector2(466, 13)
