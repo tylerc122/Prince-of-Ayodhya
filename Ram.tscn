@@ -621,5 +621,4 @@ metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0.142859, 2.14286)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_xtdxi")
