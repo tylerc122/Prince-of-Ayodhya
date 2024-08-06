@@ -19,15 +19,21 @@ public abstract partial class EnemyBase : CharacterBody2D
         target = GetParent().GetNode<Ram>("Ram");
     }
 
+    /// Handles targeting & movement
     public override void _PhysicsProcess(double delta)
     {
+        // If target is initialized correctly.
         if (target != null)
         {
+            // We send our enemy towards Ram
             Vector2 direction = (target.GlobalPosition - GlobalPosition).Normalized();
+            // Calculate velocity.
             Velocity = direction * speed;
+            // Move and slide.
             MoveAndSlide();
         }
     }
+    /// *TODO*
     public void TakeDamage(int damage)
     {
 
