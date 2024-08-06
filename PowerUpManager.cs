@@ -15,7 +15,6 @@ public partial class PowerUpManager : Node2D
 		allTemporaryPowerUps.Add(new DefenseBoost());
 
 	}
-
 	public void ApplyPowerUp(PowerUp powerUp)
 	{
 		powerUp.Apply(ram);
