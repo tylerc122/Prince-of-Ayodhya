@@ -13,7 +13,7 @@ public partial class Shrine : Node2D
 
 	private void GeneratePowerUpOptions()
 	{
-		PowerUpManager powerUpManager = GetNode<PowerUpManager>("PowerUpManager");
+		PowerUpManager powerUpManager = GetNode<PowerUpManager>("../PowerUpManager");
 		Random random = new Random();
 
 		for (int i = 0; i < powerUpOptions.Length; i++)

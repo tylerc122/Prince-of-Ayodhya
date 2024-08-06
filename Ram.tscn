@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://dn4qnebn34x1u"]
+[gd_scene load_steps=90 format=3 uid="uid://dn4qnebn34x1u"]
 
 [ext_resource type="Script" path="res://Ram.cs" id="1_7rn7d"]
 [ext_resource type="Texture2D" uid="uid://f1udf2t22mr" path="res://sprites/Rama_Forwards_walk.png" id="2_drkwa"]
@@ -585,6 +585,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_onaqn"]
 size = Vector2(8, 12)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xtdxi"]
+size = Vector2(7.71429, 12)
+
 [node name="Ram" type="CharacterBody2D"]
 position = Vector2(95, 102)
 scale = Vector2(7, 7)
@@ -613,3 +616,9 @@ metadata/_edit_group_ = true
 [node name="StaminaRegenTimer" type="Timer" parent="."]
 
 [node name="InvincibilityTimer" type="Timer" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0.142859, 2.14286)
+shape = SubResource("RectangleShape2D_xtdxi")

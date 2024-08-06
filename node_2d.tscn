@@ -1,15 +1,22 @@
-[gd_scene load_steps=16 format=3 uid="uid://co0ngvwl806b3"]
+[gd_scene load_steps=19 format=3 uid="uid://co0ngvwl806b3"]
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
 [ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://Ram.tscn" id="1_rwkut"]
 [ext_resource type="PackedScene" uid="uid://dkuud4p7sd5hr" path="res://enemy_sword.tscn" id="2_4jyoq"]
+[ext_resource type="Texture2D" uid="uid://d236rct8lhm4v" path="res://sprites/Sword.png" id="2_duh0n"]
 [ext_resource type="Script" path="res://PowerUpManager.cs" id="2_iy3c1"]
-[ext_resource type="Script" path="res://enemy_basic.cs" id="3_58ydl"]
+[ext_resource type="Script" path="res://Weapon_Axis.cs" id="2_wh3ln"]
 [ext_resource type="Script" path="res://UImanager.cs" id="3_bkev8"]
 [ext_resource type="Texture2D" uid="uid://d0n20df6jokiu" path="res://sprites/Health and stamina bars.png" id="4_01oof"]
-[ext_resource type="PackedScene" uid="uid://psndtfjkhvqa" path="res://boss_1.tscn" id="4_o3g6m"]
 [ext_resource type="PackedScene" uid="uid://b5bpja4rpgk5r" path="res://shockwave.tscn" id="8_knltm"]
 [ext_resource type="Script" path="res://Shrine.cs" id="10_2dbvd"]
+[ext_resource type="Script" path="res://NPC.cs" id="10_b3ab5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e8sy0"]
+size = Vector2(27.4009, 17.6524)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2pd0j"]
+size = Vector2(157.866, 273.027)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_35c03"]
 bg_color = Color(0.609761, 0.0910078, 0.0963074, 1)
@@ -31,8 +38,54 @@ y_sort_enabled = true
 position = Vector2(264, 289)
 
 [node name="Ram" parent="." instance=ExtResource("1_rwkut")]
-position = Vector2(-161, -114)
+y_sort_enabled = true
+position = Vector2(-158.64, -99.93)
 scale = Vector2(6.8412, 7.04897)
+
+[node name="Weapon_Axis" type="Marker2D" parent="Ram"]
+y_sort_enabled = true
+script = ExtResource("2_wh3ln")
+
+[node name="Handle_Axis" type="Marker2D" parent="Ram/Weapon_Axis"]
+y_sort_enabled = true
+position = Vector2(5.35579, 3.96228)
+
+[node name="Sword" type="Sprite2D" parent="Ram/Weapon_Axis/Handle_Axis"]
+texture_filter = 1
+position = Vector2(0, -6.38391)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_duh0n")
+
+[node name="Attack_Timer" type="Timer" parent="Ram/Weapon_Axis"]
+process_callback = 0
+
+[node name="NPC" type="CharacterBody2D" parent="."]
+script = ExtResource("10_b3ab5")
+
+[node name="Sprite2D" type="Sprite2D" parent="NPC"]
+position = Vector2(-130, 259)
+texture = ExtResource("1_06drr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPC"]
+position = Vector2(-131, 260)
+rotation = -3.14159
+scale = Vector2(4.5254, -7.36444)
+shape = SubResource("RectangleShape2D_e8sy0")
+
+[node name="Area2D" type="Area2D" parent="NPC"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPC/Area2D"]
+position = Vector2(-131.375, 260.5)
+rotation = -3.14159
+scale = Vector2(1.60104, 1.04385)
+shape = SubResource("RectangleShape2D_2pd0j")
+
+[node name="Label" type="Label" parent="NPC"]
+offset_left = 30.0
+offset_top = 217.0
+offset_right = 204.0
+offset_bottom = 299.0
+scale = Vector2(1.59, 1.42985)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("3_bkev8")
@@ -71,14 +124,11 @@ texture = ExtResource("4_01oof")
 script = ExtResource("2_iy3c1")
 
 [node name="Enemy_Basic" parent="." instance=ExtResource("2_4jyoq")]
-script = ExtResource("3_58ydl")
-
-[node name="Boss_1" parent="." instance=ExtResource("4_o3g6m")]
 
 [node name="Shockwave" parent="." instance=ExtResource("8_knltm")]
 
 [node name="CharacterBody2D2" type="CharacterBody2D" parent="."]
-position = Vector2(185, 123)
+position = Vector2(185, 123.64)
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D2"]
@@ -144,3 +194,5 @@ script = ExtResource("10_2dbvd")
 [node name="PowerUpOption2" type="Node2D" parent="Shrine"]
 
 [node name="PowerUpOption3" type="Node2D" parent="Shrine"]
+
+[connection signal="timeout" from="Ram/Weapon_Axis/Attack_Timer" to="Ram/Weapon_Axis" method="_on_attack_timer_timout"]
