@@ -1,6 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://co0ngvwl806b3"]
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
+[ext_resource type="PackedScene" uid="uid://psndtfjkhvqa" path="res://boss_1.tscn" id="1_50tys"]
 [ext_resource type="PackedScene" uid="uid://dn4qnebn34x1u" path="res://Ram.tscn" id="1_rwkut"]
 [ext_resource type="PackedScene" uid="uid://dkuud4p7sd5hr" path="res://enemy_sword.tscn" id="2_4jyoq"]
 [ext_resource type="Texture2D" uid="uid://d236rct8lhm4v" path="res://sprites/Sword.png" id="2_duh0n"]
@@ -30,12 +31,14 @@ bg_color = Color(0.114243, 0.505928, 0.749199, 1)
 [sub_resource type="Theme" id="Theme_q8anq"]
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_tpu45")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tg6pq"]
-size = Vector2(123, 123)
-
 [node name="Node2D" type="Node2D"]
 y_sort_enabled = true
 position = Vector2(264, 289)
+
+[node name="Boss_1" parent="." instance=ExtResource("1_50tys")]
+texture_filter = 1
+position = Vector2(710, 206)
+scale = Vector2(10, 10)
 
 [node name="Ram" parent="." instance=ExtResource("1_rwkut")]
 y_sort_enabled = true
@@ -126,50 +129,6 @@ script = ExtResource("2_iy3c1")
 [node name="Enemy_Basic" parent="." instance=ExtResource("2_4jyoq")]
 
 [node name="Shockwave" parent="." instance=ExtResource("8_knltm")]
-
-[node name="CharacterBody2D3" type="CharacterBody2D" parent="."]
-position = Vector2(466, 13)
-metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D3"]
-texture = ExtResource("1_06drr")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D3"]
-position = Vector2(-1.5, 0.5)
-shape = SubResource("RectangleShape2D_tg6pq")
-
-[node name="CharacterBody2D4" type="CharacterBody2D" parent="."]
-position = Vector2(185, -87)
-metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D4"]
-texture = ExtResource("1_06drr")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D4"]
-position = Vector2(-1.5, 0.5)
-shape = SubResource("RectangleShape2D_tg6pq")
-
-[node name="CharacterBody2D5" type="CharacterBody2D" parent="."]
-position = Vector2(574, 270)
-metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D5"]
-texture = ExtResource("1_06drr")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D5"]
-position = Vector2(-1.5, 0.5)
-shape = SubResource("RectangleShape2D_tg6pq")
-
-[node name="CharacterBody2D6" type="CharacterBody2D" parent="."]
-position = Vector2(703, -148)
-metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D6"]
-texture = ExtResource("1_06drr")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D6"]
-position = Vector2(-1.5, 0.5)
-shape = SubResource("RectangleShape2D_tg6pq")
 
 [node name="Shrine" type="Node2D" parent="."]
 script = ExtResource("10_2dbvd")
