@@ -23,7 +23,7 @@ public partial class shockwave : Area2D
 	/// This should be called at the end of every call of CreateShockwave()
 	/// NOTE: now that I'm looking at it, do we even need this file? feel like we could just do it in Boss_1.
 	/// @param A normalized vector that indicates the direction the shockwave should go.
-	public void StartShockwave(Vector2 direction)
+	public void StartStompEffect(Vector2 direction)
 	{
 		// Calculate velocity.
 		velocity = direction.Normalized() * speed;
