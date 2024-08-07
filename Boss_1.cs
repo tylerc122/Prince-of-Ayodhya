@@ -48,7 +48,7 @@ public partial class Boss_1 : CharacterBody2D
 
 		attackArea = GetNode<Area2D>("Area2D");
 
-		ram = GetNode<Ram>("Ram");
+		ram = GetNode<Ram>("../Ram");
 
 		// Once animation finished, called OnAnimationFinished()
 		animatedSprite.Connect("animation_finished", new Callable(this, nameof(OnAnimationFinished)));
@@ -81,12 +81,14 @@ public partial class Boss_1 : CharacterBody2D
 			case BossState.Attack:
 				// Perform the attack with no multiplier.
 				PerformAttack(1.0f, 1.0f);
+				state = BossState.Idle;
 				break;
 
 			// If in an Enraged State
 			case BossState.Enraged:
 				// Perform the attack with the enraged multipliers.
 				PerformAttack(enragedDamageMultiplier, enragedSpeedMultiplier);
+				state = BossState.Idle;
 				break;
 		}
 	}
@@ -210,6 +212,9 @@ public partial class Boss_1 : CharacterBody2D
 			// Starts at the boss.
 			boulderInstance.GlobalPosition = GlobalPosition;
 
+			GD.Print($"Boss Position: {GlobalPosition}");
+			GD.Print($"Boulder Position: {boulderInstance.GlobalPosition}");
+
 			// Make it visible and active in game.
 			GetParent().AddChild(boulderInstance);
 
@@ -320,12 +325,15 @@ public partial class Boss_1 : CharacterBody2D
 				state = BossState.Enraged;
 			}
 		}
+		attackTimer = 2;
 	}
 	/// Makes the boss move towards ram.
 	private void MoveTowardsRam(float speed, float delta)
 	{
 		Vector2 directionToRam = (ram.GlobalPosition - GlobalPosition).Normalized();
+
 		Velocity = directionToRam * speed;
+
 		MoveAndSlide();
 	}
 }
