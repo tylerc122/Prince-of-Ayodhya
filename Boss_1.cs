@@ -209,14 +209,14 @@ public partial class Boss_1 : CharacterBody2D
 			// Create an instance of the boulder, unlike the shockwave, we need this to be a RigidBody2D since we're dealing with physics & gravity.
 			RigidBody2D boulderInstance = (RigidBody2D)boulderScene.Instantiate();
 
+			// Make it visible and active in game.
+			GetParent().AddChild(boulderInstance);
+
 			// Starts at the boss.
 			boulderInstance.GlobalPosition = GlobalPosition;
 
 			GD.Print($"Boss Position: {GlobalPosition}");
 			GD.Print($"Boulder Position: {boulderInstance.GlobalPosition}");
-
-			// Make it visible and active in game.
-			GetParent().AddChild(boulderInstance);
 
 			// Initialize & assign directionToRam, need to make sure we're throwing boulder at ram.
 			Vector2 directionToRam = (ram.GlobalPosition - GlobalPosition).Normalized();
