@@ -34,6 +34,16 @@ public partial class Boss_1 : CharacterBody2D
 	private Area2D attackArea;
 	private Ram ram;
 
+	private float rangedAttackDistance = 300.0f;
+	// 30% chance to use ranged attack when in range
+	private float rangedAttackChance = 0.3f;
+	// 1 second wind-up
+	private float windUpDuration = 1.0f;
+	private float windUpTimer = 0f;
+	private bool isWindingUp = false;
+	private Sprite2D boulderSprite;
+
+
 	// Random variable for choosing attacks.
 	private Random random = new Random();
 	// In charge of storing the boss's currentAttack.
@@ -52,6 +62,14 @@ public partial class Boss_1 : CharacterBody2D
 
 		// Once animation finished, called OnAnimationFinished()
 		animatedSprite.Connect("animation_finished", new Callable(this, nameof(OnAnimationFinished)));
+
+		boulderSprite = new Sprite2D();
+		boulderSprite.Texture = ResourceLoader.Load<Texture2D>("res://sprites/d72ns19-705ce806-22a6-4112-a4d4-64fcd2fd76dd.png");
+		// Make it smaller than the actual boulder
+		boulderSprite.Scale = new Vector2(0.2f, 0.2f);
+		boulderSprite.Visible = false;
+		AddChild(boulderSprite);
+
 	}
 	public override void _PhysicsProcess(double delta)
 	{
@@ -91,39 +109,69 @@ public partial class Boss_1 : CharacterBody2D
 				state = BossState.Idle;
 				break;
 		}
+		if (isWindingUp)
+		{
+			windUpTimer += (float)delta;
+			if (windUpTimer >= windUpDuration)
+			{
+				isWindingUp = false;
+				windUpTimer = 0f;
+				boulderSprite.Visible = false;
+				ExecuteRangedAttack();
+			}
+		}
 	}
 	/// After moving towards ram, boss_1 will choose an attack at random.
 	private void ChooseAttack()
 	{
-		// May need to adjust delta/speed, again, have to see in game.
-		// Either way we need to move towards ram before an attack is chosen.
-		MoveTowardsRam(100.0f, 0.1f);
+		float distanceToRam = (ram.GlobalPosition - GlobalPosition).Length();
 
-		// We should only choose, execute, and perform the attack once Ram is close enough.
-		// Range is subject to change.
-		if (IsRamInAttackRange(200.0f))
+		if (distanceToRam > rangedAttackDistance && random.NextDouble() < rangedAttackChance)
 		{
-			// Make use of our random var that we initialized earlier.
-			int attackChoice = random.Next(4);
-			// Switch expression. Will chooose attack based on number.
-			switch (attackChoice)
-			{
-				case 0:
-					ExecuteAttack("SlamAttack", "SlamAttack");
-					break;
-				case 1:
-					ExecuteAttack("BoulderThrow", "BoulderThrow");
-					break;
-				case 2:
-					ExecuteAttack("StompAttack", "StompAttack");
-					break;
-				case 3:
-					ExecuteAttack("ChargeAttack", "ChargeAttack");
-					break;
-			}
-			// Reset attack timer once attack is performed.
-			attackTimer = 2;
+			StartWindUp();
 		}
+		else
+		{
+			// May need to adjust delta/speed, again, have to see in game.
+			// Either way we need to move towards ram before an attack is chosen.
+			MoveTowardsRam(100.0f, 0.1f);
+
+			// We should only choose, execute, and perform the attack once Ram is close enough.
+			// Range is subject to change.
+			if (IsRamInAttackRange(200.0f))
+			{
+				// Make use of our random var that we initialized earlier.
+				int attackChoice = random.Next(4);
+				// Switch expression. Will chooose attack based on number.
+				switch (attackChoice)
+				{
+					case 0:
+						ExecuteAttack("SlamAttack", "SlamAttack");
+						break;
+					case 1:
+						ExecuteAttack("StompAttack", "StompAttack");
+						break;
+					case 2:
+						ExecuteAttack("ChargeAttack", "ChargeAttack");
+						break;
+					case 3:
+						StartWindUp();
+						break;
+				}
+			}
+		}
+		// Reset attack timer once attack is performed.
+		attackTimer = 2;
+	}
+
+	private void StartWindUp()
+	{
+		isWindingUp = true;
+		windUpTimer = 0f;
+		// Put the boulder just above the boss for now, god knows if we'll ever get this far in animating.
+		boulderSprite.GlobalPosition = GlobalPosition + new Vector2(0, -50);
+		boulderSprite.Visible = true;
+		GD.Print("Start wind up");
 	}
 	/// Executes the attack by setting current attack, playing anim, & calling PerformAttack()
 	/// @param attackName the name of the attack chosen from ChooseAttack()
@@ -136,6 +184,14 @@ public partial class Boss_1 : CharacterBody2D
 
 		animatedSprite.Play(animationName);
 
+		state = BossState.Attack;
+	}
+
+	private void ExecuteRangedAttack()
+	{
+		GD.Print("Executing ranged attack");
+		currentAttack = "BoulderThrow";
+		animatedSprite.Play("BoulderThrow");
 		state = BossState.Attack;
 	}
 	// Performs the logic of the attack based on the currentAttack.
