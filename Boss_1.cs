@@ -25,6 +25,9 @@ public partial class Boss_1 : CharacterBody2D
 	private int health;
 	private float attackTimer = 0;
 
+	private float moveSpeed = 100.0f;
+	private float closeRange = 200.0f;
+
 	// Enraged multipliers
 	float enragedDamageMultiplier = 2.0f;
 	float enragedSpeedMultiplier = 1.5f;
@@ -92,6 +95,8 @@ public partial class Boss_1 : CharacterBody2D
 				{
 					// If the attack timer isn't up, we can just reduce it.
 					attackTimer -= (float)delta;
+
+					MoveTowardsRam(moveSpeed, (float)delta);
 				}
 				break;
 
@@ -130,35 +135,31 @@ public partial class Boss_1 : CharacterBody2D
 		{
 			StartWindUp();
 		}
+		else if (distanceToRam <= closeRange)
+		{
+
+			// Make use of our random var that we initialized earlier.
+			int attackChoice = random.Next(4);
+			// Switch expression. Will chooose attack based on number.
+			switch (attackChoice)
+			{
+				case 0:
+					ExecuteAttack("SlamAttack", "SlamAttack");
+					break;
+				case 1:
+					ExecuteAttack("StompAttack", "StompAttack");
+					break;
+				case 2:
+					ExecuteAttack("ChargeAttack", "ChargeAttack");
+					break;
+				case 3:
+					StartWindUp();
+					break;
+			}
+		}
 		else
 		{
-			// May need to adjust delta/speed, again, have to see in game.
-			// Either way we need to move towards ram before an attack is chosen.
-			MoveTowardsRam(100.0f, 0.1f);
-
-			// We should only choose, execute, and perform the attack once Ram is close enough.
-			// Range is subject to change.
-			if (IsRamInAttackRange(200.0f))
-			{
-				// Make use of our random var that we initialized earlier.
-				int attackChoice = random.Next(4);
-				// Switch expression. Will chooose attack based on number.
-				switch (attackChoice)
-				{
-					case 0:
-						ExecuteAttack("SlamAttack", "SlamAttack");
-						break;
-					case 1:
-						ExecuteAttack("StompAttack", "StompAttack");
-						break;
-					case 2:
-						ExecuteAttack("ChargeAttack", "ChargeAttack");
-						break;
-					case 3:
-						StartWindUp();
-						break;
-				}
-			}
+			MoveTowardsRam(moveSpeed, 0.1f);
 		}
 		// Reset attack timer once attack is performed.
 		attackTimer = 2;
@@ -171,6 +172,7 @@ public partial class Boss_1 : CharacterBody2D
 		// Put the boulder just above the boss for now, god knows if we'll ever get this far in animating.
 		boulderSprite.GlobalPosition = GlobalPosition + new Vector2(0, -50);
 		boulderSprite.Visible = true;
+		boulderSprite.Scale = new Vector2(0.04f, 0.04f);
 		GD.Print("Start wind up");
 	}
 	/// Executes the attack by setting current attack, playing anim, & calling PerformAttack()
