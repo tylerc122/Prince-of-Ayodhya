@@ -281,19 +281,11 @@ public partial class Boss_1 : CharacterBody2D
 
 			// Speed of boulder.
 			float boulderSpeed = 600.0f;
-
 			// Sets velocity of boulder.
 			boulderInstance.LinearVelocity = directionToRam * boulderSpeed;
 
 			float scaleFactor = 0.9f;
 			boulderInstance.Scale = new Vector2(scaleFactor, scaleFactor);
-			// NOTE: we can change the logic of this to have an arc instead of it just going straight across the screen, we'll
-			// see how it looks in game then adjust if necessary:
-			// CODE IF WE WANT AN ARC/GRAVITY PHYSICS:
-			// float angle = Mathf.Atan2(directionToRam.y, directionToRam.x); // Calculates angle towards Ram.
-			// float initialSpeedx = boulderSpeed * Mathf.Cos(angle);
-			// float initialSpeedy = boulderSpeed * Mathf.Sin(angle) - 50.0f;
-
 		}
 	}
 
