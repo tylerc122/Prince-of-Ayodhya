@@ -36,6 +36,7 @@ public partial class Boss_1 : CharacterBody2D
 	private AnimatedSprite2D animatedSprite;
 	private Area2D attackArea;
 	private Ram ram;
+	private Area2D boulderArea;
 
 	private float rangedAttackDistance = 300.0f;
 	// 30% chance to use ranged attack when in range
@@ -62,6 +63,17 @@ public partial class Boss_1 : CharacterBody2D
 		attackArea = GetNode<Area2D>("Area2D");
 
 		ram = GetNode<Ram>("../Ram");
+
+		var boulderArea = GetNode<Area2D>("../Boulder/Area2D");
+
+		if (boulderArea == null)
+		{
+			GD.Print("boulderArea not initialized properly");
+		}
+		else
+		{
+			GD.Print("boulderArea good");
+		}
 
 		// Once animation finished, called OnAnimationFinished()
 		animatedSprite.Connect("animation_finished", new Callable(this, nameof(OnAnimationFinished)));
@@ -117,6 +129,7 @@ public partial class Boss_1 : CharacterBody2D
 		if (isWindingUp)
 		{
 			windUpTimer += (float)delta;
+
 			if (windUpTimer >= windUpDuration)
 			{
 				isWindingUp = false;
@@ -168,12 +181,15 @@ public partial class Boss_1 : CharacterBody2D
 	private void StartWindUp()
 	{
 		isWindingUp = true;
-		windUpTimer = 0f;
+		// Increasing this value decreases the time spend winding up
+		// Note: We may want to make this a variable value so that the time for it to wind up won't
+		// always be the same, depends on how hard we want to make the game.
+		windUpTimer = 0.5f;
 		// Put the boulder just above the boss for now, god knows if we'll ever get this far in animating.
-		boulderSprite.GlobalPosition = GlobalPosition + new Vector2(0, -50);
+		boulderSprite.GlobalPosition = GlobalPosition + new Vector2(0, -100);
 		boulderSprite.Visible = true;
 		boulderSprite.Scale = new Vector2(0.04f, 0.04f);
-		GD.Print("Start wind up");
+		GD.Print("Started wind up");
 	}
 	/// Executes the attack by setting current attack, playing anim, & calling PerformAttack()
 	/// @param attackName the name of the attack chosen from ChooseAttack()
@@ -195,6 +211,7 @@ public partial class Boss_1 : CharacterBody2D
 		currentAttack = "BoulderThrow";
 		animatedSprite.Play("BoulderThrow");
 		state = BossState.Attack;
+		DealDamage(10, boulderArea);
 	}
 	// Performs the logic of the attack based on the currentAttack.
 	private void PerformAttack(float damageMultiplier, float speedMultiplier)
@@ -280,13 +297,16 @@ public partial class Boss_1 : CharacterBody2D
 			Vector2 directionToRam = (ram.GlobalPosition - GlobalPosition).Normalized();
 
 			// Speed of boulder.
-			float boulderSpeed = 600.0f;
+			// Note: Might need to slow down
+			float boulderSpeed = 1900.0f;
+
 			// Sets velocity of boulder.
 			boulderInstance.LinearVelocity = directionToRam * boulderSpeed;
 
 			float scaleFactor = 0.9f;
 			boulderInstance.Scale = new Vector2(scaleFactor, scaleFactor);
 		}
+
 	}
 
 	/// Stomp attack.
@@ -388,5 +408,9 @@ public partial class Boss_1 : CharacterBody2D
 		Velocity = directionToRam * speed;
 
 		MoveAndSlide();
+	}
+	private void DealDamage(int damage, Area2D area)
+	{
+
 	}
 }

@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://jcudf7k8vhpg"]
+[gd_scene load_steps=4 format=3 uid="uid://jcudf7k8vhpg"]
 
 [ext_resource type="Texture2D" uid="uid://s50tqyvwg6va" path="res://sprites/d72ns19-705ce806-22a6-4112-a4d4-64fcd2fd76dd.png" id="1_f7lbs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nspyj"]
 radius = 47.0106
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hkq6e"]
+radius = 51.0098
 
 [node name="Boulder" type="RigidBody2D"]
 
@@ -15,3 +18,9 @@ texture = ExtResource("1_f7lbs")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-2, -1)
 shape = SubResource("CircleShape2D_nspyj")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_hkq6e")
