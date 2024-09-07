@@ -9,20 +9,22 @@ public partial class UImanager : CanvasLayer
 	public int healthValue;
 	public int staminaValue;
 	private Ram ram;
+	private Sprite2D barOutlines;
 	public override void _Ready()
 	{
-		// Get health bar node.
-		health = GetNode<ProgressBar>("HealthBar");
-		stamina = GetNode<ProgressBar>("StaminaBar");
-
-		// Get Ram node.
+		// Existing code...
+		health = GetNode<ProgressBar>("Control/HealthBar");
+		stamina = GetNode<ProgressBar>("Control/StaminaBar");
 		ram = GetNode<Ram>("../Ram");
-
-		// Adds GameOver method to invocation list of OnDeath event.
 		ram.OnDeath += GameOver;
-
-		// Check to see if healthbar is accurate.
 		ram.TakeDamage(10);
+
+		// New code for bar outlines
+		barOutlines = GetNode<Sprite2D>("Control/Sprite2D");
+		GetTree().Root.SizeChanged += UpdateBarOutlinesPosition;
+
+		// Call it once to set initial position
+		UpdateBarOutlinesPosition();
 	}
 	//updates health bar to match player health
 	public void updateHealth()
@@ -45,8 +47,27 @@ public partial class UImanager : CanvasLayer
 
 	}
 
+	/// ACQUIRED FROM CHATPGT
+	/// This was really annoying and you won't see me dealing with the UI so what's done is done SORRY.
+	private void UpdateBarOutlinesPosition()
+	{
+		Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+
+		float xPosition = viewportSize.X - (barOutlines.Texture.GetWidth() * barOutlines.Scale.X / 2);
+		float yPosition = barOutlines.Texture.GetHeight() * barOutlines.Scale.Y / 2;
+
+		barOutlines.Position = new Vector2(xPosition, yPosition);
+	}
+
+	public override void _ExitTree()
+	{
+		// Disconnect the signal when the node is removed from the scene
+		GetTree().Root.SizeChanged -= UpdateBarOutlinesPosition;
+	}
 	private void GameOver()
 	{
 		GD.Print("Ram restarts cycle");
 	}
 }
+
+
