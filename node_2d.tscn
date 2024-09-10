@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://co0ngvwl806b3"]
+[gd_scene load_steps=19 format=3 uid="uid://co0ngvwl806b3"]
 
 [ext_resource type="Texture2D" uid="uid://drqqayi6ya4of" path="res://icon.svg" id="1_06drr"]
 [ext_resource type="PackedScene" uid="uid://psndtfjkhvqa" path="res://boss_1.tscn" id="1_50tys"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://b5bpja4rpgk5r" path="res://shockwave.tscn" id="8_knltm"]
 [ext_resource type="Script" path="res://Shrine.cs" id="10_2dbvd"]
 [ext_resource type="Script" path="res://NPC.cs" id="10_b3ab5"]
-[ext_resource type="PackedScene" uid="uid://jcudf7k8vhpg" path="res://boulder.tscn" id="13_x1qib"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e8sy0"]
 size = Vector2(27.4009, 17.6524)
@@ -153,8 +152,5 @@ script = ExtResource("10_2dbvd")
 [node name="PowerUpOption2" type="Node2D" parent="Shrine"]
 
 [node name="PowerUpOption3" type="Node2D" parent="Shrine"]
-
-[node name="Boulder" parent="." instance=ExtResource("13_x1qib")]
-position = Vector2(-1094, 55)
 
 [connection signal="timeout" from="Ram/Weapon_Axis/Attack_Timer" to="Ram/Weapon_Axis" method="_on_attack_timer_timout"]

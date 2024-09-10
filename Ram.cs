@@ -128,8 +128,9 @@ public partial class Ram : CharacterBody2D
 		}
 
 		// If the roll button is pressed and our rollTimer isn't running.
-		if (Input.IsActionPressed("ui_roll") && rollTimer.IsStopped() && currentStamina >= 40)
+		if (Input.IsActionPressed("ui_roll") && rollTimer.IsStopped() && currentStamina >= 20)
 		{
+			GD.Print(currentStamina);
 			// We allow the user to roll.
 			StartRoll();
 			currentStamina -= 20;
