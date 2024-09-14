@@ -27,30 +27,35 @@ public partial class Weapon_Axis : Marker2D
 	{
 		LookAt(GetGlobalMousePosition());
 
-		if (Input.IsActionPressed("click") && cooldown){
+		if (Input.IsActionPressed("attack") && cooldown)
+		{
 			marker2D.RotationDegrees = 180;
 			Attack_Timer.Start();
 			cooldown = false;
-			
+
 		}
-		if (this.RotationDegrees >= 90 && this.RotationDegrees <= 270 || this.RotationDegrees <= -90 && this.RotationDegrees >= -270){
+		if (this.RotationDegrees >= 90 && this.RotationDegrees <= 270 || this.RotationDegrees <= -90 && this.RotationDegrees >= -270)
+		{
 			this.Scale = new Vector2(1, -1);
-			
+
 		}
-		else{
+		else
+		{
 			this.Scale = new Vector2(1, 1);
 		}
-		if (this.RotationDegrees >= 360 ||this.RotationDegrees <= -360){
+		if (this.RotationDegrees >= 360 || this.RotationDegrees <= -360)
+		{
 			this.RotationDegrees = 0;
 		}
 
-	
 
-		
+
+
 	}
-	public void _on_attack_timer_timout(){
+	public void _on_attack_timer_timout()
+	{
 		marker2D.RotationDegrees = 0;
 		cooldown = true;
 	}
 }
-	
+

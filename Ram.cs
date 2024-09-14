@@ -13,7 +13,9 @@ public partial class Ram : CharacterBody2D
 	public int maxStamina = 100;
 	public int staminaDrain = 1;
 	public int staminaRegen = 1;
+	public int attackDamage = 10;
 	private const float roll_duration = 0.34f;
+
 
 	// State variables
 	public int currentHealth;
@@ -38,6 +40,7 @@ public partial class Ram : CharacterBody2D
 	private Timer rollTimer;
 	private Timer staminaRegenTimer;
 	private Area2D interactionArea;
+	private Boss_1 boss;
 
 	// Event(s)
 	public event Action OnDeath;
@@ -52,6 +55,12 @@ public partial class Ram : CharacterBody2D
 		rollTimer = GetNode<Timer>("RollTimer");
 		invincibiltyTimer = GetNode<Timer>("InvincibilityTimer");
 		interactionArea = GetNode<Area2D>("Area2D");
+		boss = GetNode<Boss_1>("/root/Node2D/Boss_1");
+
+		if (boss == null)
+		{
+			GD.Print("boss isn't right");
+		}
 
 		// rollTimer properties.
 		rollTimer.WaitTime = roll_duration;
@@ -91,6 +100,12 @@ public partial class Ram : CharacterBody2D
 
 			return;
 		}
+
+		if (Input.IsActionJustPressed("attack"))
+		{
+			Attack();
+		}
+
 		// Before we do any kind of idle/walking animation, we must check if we are currently in a roll state.
 		if (isRolling)
 		{
@@ -432,6 +447,11 @@ public partial class Ram : CharacterBody2D
 				currentStamina = maxStamina;
 			}
 		}
+	}
+
+	public void Attack()
+	{
+		return;
 	}
 	/// Called when Ram needs to be knocked back.
 	public void ApplyKnockback(Godot.Vector2 direction, float force)

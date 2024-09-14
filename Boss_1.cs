@@ -374,6 +374,22 @@ public partial class Boss_1 : CharacterBody2D
 			Die();
 		}
 	}
+
+	public void TakeDamage(int damage)
+	{
+		health -= damage;
+
+		GD.Print("Boss took damage.");
+
+		if (health <= 25)
+		{
+			state = BossState.Enraged;
+		}
+		else if (health <= 0)
+		{
+			Die(); ;
+		}
+	}
 	/// Called when the boss die.
 	private void Die()
 	{
