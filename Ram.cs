@@ -40,6 +40,7 @@ public partial class Ram : CharacterBody2D
 	private Timer rollTimer;
 	private Timer staminaRegenTimer;
 	private Area2D interactionArea;
+	private Area2D attackArea;
 	private Boss_1 boss;
 
 	// Event(s)
@@ -56,6 +57,12 @@ public partial class Ram : CharacterBody2D
 		invincibiltyTimer = GetNode<Timer>("InvincibilityTimer");
 		interactionArea = GetNode<Area2D>("Area2D");
 		boss = GetNode<Boss_1>("/root/Node2D/Boss_1");
+		attackArea = GetNode<Area2D>("AttackArea");
+
+		if (attackArea == null)
+		{
+			GD.Print("Attack area bad");
+		}
 
 		if (boss == null)
 		{
@@ -451,7 +458,9 @@ public partial class Ram : CharacterBody2D
 
 	public void Attack()
 	{
-		return;
+		if (attackArea != null)
+		{
+		}
 	}
 	/// Called when Ram needs to be knocked back.
 	public void ApplyKnockback(Godot.Vector2 direction, float force)
