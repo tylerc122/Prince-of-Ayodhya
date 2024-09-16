@@ -7,7 +7,6 @@ public partial class NPC : CharacterBody2D
 {
 	// Holds the dialogue that can be accessed by ram.
 	String[] Dialogues = new String[10];
-
 	// Tracks the index of the dialogue.
 	private int dialogueIndex = 0;
 	// Initialize our label, which deals with showing our dialogue in game.
@@ -27,7 +26,7 @@ public partial class NPC : CharacterBody2D
 
 		// Set up dialogue.
 		Dialogues[0] = "Hello! Welcome to " + "[b]Dandaka Forest.[/b]";
-		// Ideally, the boldened controls will not be stagnant, rather we want to make it whatever they assign to that specific action.
+		// Ideally, the boldened controls will not be default, rather we want to make it whatever key it actually is for each user as we'll let them change controls.
 		Dialogues[1] = "Use [b]'Space'[/b] to roll";
 		Dialogues[2] = "Use [b]'Shift'[/b] to sprint";
 		Dialogues[3] = "Press [b]'left-click'[/b] to attack";
@@ -39,7 +38,6 @@ public partial class NPC : CharacterBody2D
 		Dialogues[7] = "c";
 		Dialogues[8] = "d";
 		Dialogues[9] = "Goodbye and good luck!";
-
 
 		// Initially, dialogue is not visible.
 		dialogueLabel.Visible = false;
@@ -72,12 +70,11 @@ public partial class NPC : CharacterBody2D
 			dialogueLabel.Text = "[Press 'E' to interact]";
 		}
 	}
-	/// Called when ram exists the area of the NPC
+
+	/// Called when ram exists the area of the NPC (same logic as OnAreaEntered)
 	/// @param the area of the object that entered NPC range.
 	private void OnAreaExited(Area2D area)
 	{
-		// Same logic as OnAreaEntered:
-
 		var parent = area.GetParent();
 		if (parent is Ram)
 		{
@@ -85,6 +82,7 @@ public partial class NPC : CharacterBody2D
 			dialogueLabel.Visible = false;
 		}
 	}
+
 	/// Handles showing subsequent dialogue.
 	private void ShowNextDialogue()
 	{

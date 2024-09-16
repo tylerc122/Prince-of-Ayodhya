@@ -7,25 +7,26 @@ public partial class PowerUpManager : Node
 	private Ram ram;
 	private List<PowerUp> temporaryPowerUps = new List<PowerUp>();
 	public List<PowerUp> allTemporaryPowerUps = new List<PowerUp>();
+
 	public override void _Ready()
 	{
 		ram = GetNode<Ram>("../Ram");
 		allTemporaryPowerUps.Add(new DamageBoost());
 		allTemporaryPowerUps.Add(new SpeedBoost());
 		allTemporaryPowerUps.Add(new DefenseBoost());
-
 	}
+
 	public void ApplyPowerUp(PowerUp powerUp)
 	{
 		powerUp.Apply(ram);
 
-		if (powerUp.isTemporary())
+		if (!powerUp.isTemporary())
 		{
-			temporaryPowerUps.Add(powerUp);
+			// Not sure how to implement perm power ups yet
 		}
 		else
 		{
-			// Not sure how to implement perm power ups yet
+			temporaryPowerUps.Add(powerUp);
 		}
 	}
 
@@ -36,10 +37,5 @@ public partial class PowerUpManager : Node
 			powerUp.RemoveEffect(ram);
 		}
 		temporaryPowerUps.Clear();
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

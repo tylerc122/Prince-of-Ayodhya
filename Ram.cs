@@ -16,7 +16,6 @@ public partial class Ram : CharacterBody2D
 	public int attackDamage = 10;
 	private const float roll_duration = 0.34f;
 
-
 	// State variables
 	public int currentHealth;
 	public int currentStamina;
@@ -59,16 +58,6 @@ public partial class Ram : CharacterBody2D
 		boss = GetNode<Boss_1>("/root/Node2D/Boss_1");
 		attackArea = GetNode<Area2D>("AttackArea");
 
-		if (attackArea == null)
-		{
-			GD.Print("Attack area bad");
-		}
-
-		if (boss == null)
-		{
-			GD.Print("boss isn't right");
-		}
-
 		// rollTimer properties.
 		rollTimer.WaitTime = roll_duration;
 		rollTimer.OneShot = true;
@@ -86,6 +75,7 @@ public partial class Ram : CharacterBody2D
 		// Initially idle
 		animatedSprite2D.Play("idle_right");
 
+		// Invincibility props.
 		invincibiltyTimer.OneShot = true;
 		invincibiltyTimer.WaitTime = invincibilityDuration;
 		staminaRegenTimer.Connect("timeout", new Callable(this, nameof(ResetInvIncibility)));
@@ -100,11 +90,8 @@ public partial class Ram : CharacterBody2D
 		{
 			// Reduce the knockback timer.
 			knockbackTimer -= (float)delta;
-
 			Velocity = knockbackVelocity;
-
 			MoveAndSlide();
-
 			return;
 		}
 
@@ -126,7 +113,6 @@ public partial class Ram : CharacterBody2D
 
 		bool sprintCheck = IsSprinting();
 
-
 		// First we check whether or not the velocity vector is zero or not.
 		if (velocity != Godot.Vector2.Zero)
 		{
@@ -139,7 +125,6 @@ public partial class Ram : CharacterBody2D
 			MoveAndSlide();
 			// Update our animation based on the velocity.
 			UpdateWalkAnimation(velocity);
-
 		}
 		// If our velocity vector happens to be zero.
 		else
@@ -174,7 +159,6 @@ public partial class Ram : CharacterBody2D
 			velocity.X += 1;
 			tracker = 1;
 		}
-
 		// Check if the left key is being pressed.
 		if (movingLeft)
 		{
@@ -182,7 +166,6 @@ public partial class Ram : CharacterBody2D
 			velocity.X -= 1;
 			tracker = 2;
 		}
-
 		// Check if the up key is being pressed.
 		if (movingUp)
 		{
@@ -190,7 +173,6 @@ public partial class Ram : CharacterBody2D
 			velocity.Y -= 1;
 			tracker = 3;
 		}
-
 		// Check if the down key is being pressed.
 		if (movingDown)
 		{
@@ -198,7 +180,6 @@ public partial class Ram : CharacterBody2D
 			velocity.Y += 1;
 			tracker = 4;
 		}
-
 		// Update tracker for diagonal movements.
 		if (movingRight && movingUp)
 		{
@@ -223,6 +204,7 @@ public partial class Ram : CharacterBody2D
 
 		return velocity;
 	}
+
 	/// Handles when Ram is sprinting.
 	/// @return bool returns truth value of if Ram is sprinting or not.
 	private bool IsSprinting()
@@ -263,7 +245,6 @@ public partial class Ram : CharacterBody2D
 				animatedSprite2D.Play("right");
 			}
 		}
-
 		else if (velocity.X < 0)
 		{
 			if (velocity.Y < 0)
@@ -281,7 +262,6 @@ public partial class Ram : CharacterBody2D
 				animatedSprite2D.Play("left");
 			}
 		}
-
 		else if (velocity.Y > 0)
 		{
 			animatedSprite2D.Play("down");
@@ -324,10 +304,10 @@ public partial class Ram : CharacterBody2D
 				break;
 		}
 	}
+
 	/// Handles the animations of Ram's roll as well as disabling our collisionShape.
 	private void StartRoll()
 	{
-
 		isRolling = true;
 		// Similar switch case to our idle animation, but rather than our idle animation, we want our roll animation.
 		// We also update our rollDirection vector, so that we roll in the correct direction.
@@ -401,6 +381,7 @@ public partial class Ram : CharacterBody2D
 		{
 			return;
 		}
+
 		// Take away the damage taken from current health.
 		currentHealth -= amount;
 
@@ -413,12 +394,13 @@ public partial class Ram : CharacterBody2D
 			// Handle game over logic in UImanager.
 			OnDeath?.Invoke();
 		}
+
 		isInvincible = true;
 
 		invincibiltyTimer.Start();
 	}
 
-	// Resets invincibility after hit.
+	/// Resets invincibility after hit.
 	private void ResetInvIncibility()
 	{
 		isInvincible = false;
@@ -456,23 +438,20 @@ public partial class Ram : CharacterBody2D
 		}
 	}
 
+	/// **TODO**
 	public void Attack()
 	{
 		if (attackArea != null)
 		{
 		}
 	}
+
 	/// Called when Ram needs to be knocked back.
 	public void ApplyKnockback(Godot.Vector2 direction, float force)
 	{
 		knockbackVelocity = direction * force;
 		knockbackTimer = knockbackDuration;
 	}
-	public void OnAreaEntered(Area2D area)
-	{
-		GD.Print($"Ram entered area: {area.Name}");
-	}
-
 }
 
 
