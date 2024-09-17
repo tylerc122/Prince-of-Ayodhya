@@ -10,9 +10,9 @@ public partial class UImanager : CanvasLayer
 	public int staminaValue;
 	private Ram ram;
 	private Sprite2D barOutlines;
+
 	public override void _Ready()
 	{
-		// Existing code...
 		health = GetNode<ProgressBar>("Control/HealthBar");
 		stamina = GetNode<ProgressBar>("Control/StaminaBar");
 		ram = GetNode<Ram>("../Ram");
@@ -26,25 +26,26 @@ public partial class UImanager : CanvasLayer
 		// Call it once to set initial position
 		UpdateBarOutlinesPosition();
 	}
-	//updates health bar to match player health
-	public void updateHealth()
-	{
-		healthValue = ram.currentHealth;
-		health.Value = healthValue;
-	}
-	//updates stamina bar to match player stamina
-	public void updateStamina()
-	{
-		staminaValue = ram.currentStamina;
-		stamina.Value = staminaValue;
-	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		updateHealth();
 		updateStamina();
 
+	}
+
+	/// Updates health bar to match player health
+	public void updateHealth()
+	{
+		healthValue = ram.currentHealth;
+		health.Value = healthValue;
+	}
+
+	/// Updates stamina bar to match player stamina
+	public void updateStamina()
+	{
+		staminaValue = ram.currentStamina;
+		stamina.Value = staminaValue;
 	}
 
 	/// ACQUIRED FROM CHATPGT

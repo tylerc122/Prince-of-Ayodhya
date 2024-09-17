@@ -9,6 +9,7 @@ public partial class PowerUpManager : Node
 	public List<PowerUp> activePowerUps = new List<PowerUp>();
 	public List<PowerUp> allPermanentPowerUps = new List<PowerUp>();
 	public List<PowerUp> allTemporaryPowerUps = new List<PowerUp>();
+
 	public override void _Ready()
 	{
 		ram = GetNode<Ram>("../Ram");
@@ -22,6 +23,7 @@ public partial class PowerUpManager : Node
 		allTemporaryPowerUps.Add(new SpeedBoost());
 		allTemporaryPowerUps.Add(new DefenseBoost());
 	}
+
 	public void ApplyPowerUp(PowerUp powerUp)
 	{
 		powerUp.Apply(ram);

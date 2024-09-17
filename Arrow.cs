@@ -22,6 +22,7 @@ public partial class Arrow : Area2D
 		Position = startPosition;
 		direction = (targetPosition - startPosition).Normalized();
 	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{

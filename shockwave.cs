@@ -6,17 +6,13 @@ public partial class shockwave : Area2D
 {
 	// Speed of shockwave
 	private float speed = 200.0f;
-
-	// Can just use positional updating rather than moveandslide, don't need collision really.
 	private Vector2 velocity = new Vector2();
-
 	private AnimatedSprite2D animatedSprite;
 
 	public override void _Ready()
 	{
 		// When the shockwave enters a body, call OnBodyentered
 		Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
-
 		animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 	}
 

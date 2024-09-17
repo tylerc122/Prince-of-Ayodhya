@@ -11,6 +11,7 @@ using System.Collections;
 /// During the next _PhysicsProcess() call, the boss is now an attack state so PerformAttack() will be called with normal multipliers.
 /// Perform attack then checks currentAttack and calls the corresponding method.
 /// When the animation is finished, OnAnimationFinished() is called and the boss goes back to idle, unless under 25 hp, then it will stay in enraged mode.
+/// Note that many of the attack methods take a damage multiplier parameter, this is only used (in theory) when the boss is in an enraged state.
 /// </summary>
 
 public partial class Boss_1 : CharacterBody2D
@@ -24,6 +25,7 @@ public partial class Boss_1 : CharacterBody2D
 	public int MaxHealth = 100;
 	private int health;
 	private float attackTimer = 0;
+	private String currentAttack;
 
 	private float moveSpeed = 100.0f;
 	private float closeRange = 200.0f;
@@ -38,20 +40,16 @@ public partial class Boss_1 : CharacterBody2D
 	private Ram ram;
 	private Area2D boulderArea;
 
+
+	// Ranged attack attributes
 	private float rangedAttackDistance = 300.0f;
-	// 30% chance to use ranged attack when in range
 	private float rangedAttackChance = 0.3f;
-	// 1 second wind-up
 	private float windUpDuration = 1.0f;
 	private float windUpTimer = 0f;
 	private bool isWindingUp = false;
 	private Sprite2D boulderSprite;
 
-
-	// Random variable for choosing attacks.
 	private Random random = new Random();
-	// In charge of storing the boss's currentAttack.
-	private String currentAttack;
 
 	public override void _Ready()
 	{
@@ -107,13 +105,14 @@ public partial class Boss_1 : CharacterBody2D
 				{
 					// If the attack timer isn't up, we can just reduce it.
 					attackTimer -= (float)delta;
-
 					MoveTowardsRam(moveSpeed, (float)delta);
 				}
+
 				break;
 
 			// If in Attack state
 			case BossState.Attack:
+
 				// Perform the attack with no multiplier.
 				PerformAttack(1.0f, 1.0f);
 				state = BossState.Idle;
@@ -126,6 +125,7 @@ public partial class Boss_1 : CharacterBody2D
 				state = BossState.Idle;
 				break;
 		}
+
 		if (isWindingUp)
 		{
 			windUpTimer += (float)delta;
@@ -139,6 +139,7 @@ public partial class Boss_1 : CharacterBody2D
 			}
 		}
 	}
+
 	/// After moving towards ram, boss_1 will choose an attack at random.
 	private void ChooseAttack()
 	{
@@ -148,9 +149,9 @@ public partial class Boss_1 : CharacterBody2D
 		{
 			StartWindUp();
 		}
+
 		else if (distanceToRam <= closeRange)
 		{
-
 			// Make use of our random var that we initialized earlier.
 			int attackChoice = random.Next(4);
 			// Switch expression. Will chooose attack based on number.
@@ -170,6 +171,7 @@ public partial class Boss_1 : CharacterBody2D
 					break;
 			}
 		}
+
 		else
 		{
 			MoveTowardsRam(moveSpeed, 0.1f);
@@ -178,6 +180,7 @@ public partial class Boss_1 : CharacterBody2D
 		attackTimer = 2;
 	}
 
+	/// Starts the windup for boulder attack.
 	private void StartWindUp()
 	{
 		isWindingUp = true;
@@ -205,15 +208,17 @@ public partial class Boss_1 : CharacterBody2D
 		state = BossState.Attack;
 	}
 
+	/// Actually conducts the attack, animation, state change, everything that comes with a regular attack.
 	private void ExecuteRangedAttack()
 	{
 		GD.Print("Executing ranged attack");
 		currentAttack = "BoulderThrow";
 		animatedSprite.Play("BoulderThrow");
 		state = BossState.Attack;
-		DealDamage(10, boulderArea);
+		DealRangedDamage(10, boulderArea);
 	}
-	// Performs the logic of the attack based on the currentAttack.
+
+	/// Performs the logic of the attack based on the currentAttack.
 	private void PerformAttack(float damageMultiplier, float speedMultiplier)
 	{
 		// Since we now have the boss moving towards ram before attacking,
@@ -236,7 +241,7 @@ public partial class Boss_1 : CharacterBody2D
 		}
 	}
 
-	/// Slam attack.
+	/// Logic from the slam attack option.
 	private void SlamAttackLogic(float damageMultiplier)
 	{
 		// If Ram is range for the intial slamdown
@@ -248,11 +253,13 @@ public partial class Boss_1 : CharacterBody2D
 		// Either way, the shockwave will be created.
 		CreateShockwave();
 	}
+
 	// The actual creation of the shockwave from the slam.
 	private void CreateShockwave()
 	{
 		// Loads a resource form the shockwave scene, we must cast to a 'PackedScene' since we'll get a 'Resource' object if we don't.
 		PackedScene shockwaveScene = (PackedScene)ResourceLoader.Load("res://shockwave.tscn)");
+
 		// Succesfully loaded?
 		if (shockwaveScene != null)
 		{
@@ -272,7 +279,8 @@ public partial class Boss_1 : CharacterBody2D
 			shockwaveInstance.Call("StartShockwave", directionToRam);
 		}
 	}
-	// Boulder throw attack.
+
+	/// Logic for the boulder throw attack option.
 	private void BoulderThrowLogic(float damageMultiplier)
 	{
 		// Same thing as shockwave.
@@ -309,7 +317,7 @@ public partial class Boss_1 : CharacterBody2D
 
 	}
 
-	/// Stomp attack.
+	/// Logic fort he stomp attack option.
 	private void StompAttackLogic(float damageMultiplier)
 	{
 		// Check if ram is in range.
@@ -326,7 +334,7 @@ public partial class Boss_1 : CharacterBody2D
 		CreateStompEffect();
 	}
 
-	/// Similar to all other attacks.
+	/// Creates the actual effect needed to visually notify the user that the shockwave has been sent out.
 	private void CreateStompEffect()
 	{
 		PackedScene stompScene = (PackedScene)ResourceLoader.Load("res://stomp.tscn");
@@ -342,6 +350,8 @@ public partial class Boss_1 : CharacterBody2D
 			stompInstance.Call("StartStompEffect");
 		}
 	}
+
+	/// Logic for the charge attack option.
 	private void ChargeAttackLogic(float damageMultiplier)
 	{
 		float chargeSpeed = 500.0f;
@@ -353,6 +363,7 @@ public partial class Boss_1 : CharacterBody2D
 			ram.TakeDamage((int)(25 * damageMultiplier));
 		}
 	}
+
 	/// Called when we want to check if ram is in the boss's attack range
 	/// @param attackRange the range of the specific attack.
 	/// @return bool the truth value of whether or not ram is within range or not.
@@ -360,21 +371,8 @@ public partial class Boss_1 : CharacterBody2D
 	{
 		return (ram.GlobalPosition - GlobalPosition).Length() <= attackRange;
 	}
-	// Called when Ram performs a successful attack, currently not in use, but self explanatory.
-	public void OnHealthChanged(int newHealth)
-	{
-		health = newHealth;
 
-		if (health <= 25)
-		{
-			state = BossState.Enraged;
-		}
-		else if (health <= 0)
-		{
-			Die();
-		}
-	}
-
+	/// Called when Ram performs a successful attack, currently not in use, but self explanatory.
 	public void TakeDamage(int damage)
 	{
 		health -= damage;
@@ -390,13 +388,14 @@ public partial class Boss_1 : CharacterBody2D
 			Die(); ;
 		}
 	}
+
 	/// Called when the boss die.
 	private void Die()
 	{
 		GD.Print("Boss Died");
 	}
 
-	// Called when an attacking(?) animation is carried out in full.
+	/// Called when an attacking(?) animation is carried out in full.
 	private void OnAnimationFinished()
 	{
 		// If we're in attack state.
@@ -416,6 +415,7 @@ public partial class Boss_1 : CharacterBody2D
 		}
 		attackTimer = 2;
 	}
+
 	/// Makes the boss move towards ram.
 	private void MoveTowardsRam(float speed, float delta)
 	{
@@ -425,7 +425,11 @@ public partial class Boss_1 : CharacterBody2D
 
 		MoveAndSlide();
 	}
-	private void DealDamage(int damage, Area2D area)
+
+	/// Specifically used for the boss to deal damage off the boulder throw.
+	/// @param damage the damage that the boss will deal to ram.
+	/// @param area the area of the boulder that we can use(?) 
+	private void DealRangedDamage(int damage, Area2D area)
 	{
 
 	}
