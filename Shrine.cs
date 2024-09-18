@@ -1,5 +1,12 @@
+/// Shrine.cs will ideally be one of two ways ram will achieve power ups. The 'shrine', ambiguous name since I don't know what it should actually be
+/// will bestow the temporary power ups, most likely after every level you beat up to the boss. Veer suggested that we should do different gods,
+/// similar to how hades has boons that corresponds to the greeks gods, we'll have gods like Saraswati, Agni, Durga, and more, ideally they all 
+/// will give unique power ups based on their given descriptions in Hinduism. The counterpart to shrine will be a meditation area we have in the home base area
+/// this will be useful after Ram completes hard encounters such as bosses. Bosses will reward Ram with 'soul points' which will be used in meditation to
+/// upgrade his soul, these are the permanent upgrades that will transfer over each time he restarts the cycle. 
 using Godot;
 using System;
+
 
 public partial class Shrine : Node2D
 {
