@@ -2,26 +2,22 @@ using Godot;
 
 public partial class SpeedBoost : PowerUp
 {
-    private int speedBoost = 5;
+    private int speedBoost = 50;
 
     public SpeedBoost()
     {
         PowerUpName = "Speed Boost";
-        // Either we need to specify that it's only for the run or have some distinction visually.
-        Description = "Increases movement speed by x";
+        Description = "Increases movement speed by 50";
+        isTemporary = true;
     }
 
     public override void Apply(Ram ram)
     {
-
+        ram.speed += speedBoost;
     }
 
-    public override bool isTemporary()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void RemoveEffect(Ram ram)
     {
-        throw new System.NotImplementedException();
+        ram.speed -= speedBoost;
     }
 }

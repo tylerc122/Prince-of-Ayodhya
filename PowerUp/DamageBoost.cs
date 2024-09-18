@@ -7,22 +7,18 @@ public partial class DamageBoost : PowerUp
     public DamageBoost()
     {
         PowerUpName = "Damage Boost";
-        // Either we need to specify that it's only for the run or have some distinction visually.
-        Description = "Increases damage by 10 (for the current run?)";
+        // Either we need to specify that it's only for the run or have some distinction visually. Maybe we can just make it clear thru gameplay, don't think we need allat
+        Description = "Increases damage by 10";
+        isTemporary = true;
     }
 
     public override void Apply(Ram ram)
     {
-        //ram.Damage += damageIncrease;
-    }
-
-    public override bool isTemporary()
-    {
-        throw new System.NotImplementedException();
+        ram.attackDamage += damageIncrease;
     }
 
     public override void RemoveEffect(Ram ram)
     {
-        throw new System.NotImplementedException();
+        ram.attackDamage -= damageIncrease;
     }
 }

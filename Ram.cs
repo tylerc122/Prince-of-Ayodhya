@@ -14,6 +14,7 @@ public partial class Ram : CharacterBody2D
 	public int staminaDrain = 1;
 	public int staminaRegen = 1;
 	public int attackDamage = 10;
+	public int defense = 0;
 	private const float roll_duration = 0.34f;
 
 	// State variables

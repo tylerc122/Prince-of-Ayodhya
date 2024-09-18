@@ -11,7 +11,11 @@ using System;
 public partial class Shrine : Node2D
 {
 	// Ideally we should have three powerup options per shrine.
-	private PowerUp[] powerUpOptions = new PowerUp[3];
+	public int numberOfOptions = 3;
+
+	private PowerUp[] powerUpOptions;
+	private PowerUpManager powerUpManager;
+
 
 	public override void _Ready()
 	{
