@@ -120,6 +120,7 @@ public partial class Boss_1 : CharacterBody2D
 
 			// If in an Enraged State
 			case BossState.Enraged:
+
 				// Perform the attack with the enraged multipliers.
 				PerformAttack(enragedDamageMultiplier, enragedSpeedMultiplier);
 				state = BossState.Idle;
