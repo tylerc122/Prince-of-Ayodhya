@@ -10,5 +10,4 @@ public abstract partial class PowerUp : Node2D
     public abstract void Apply(Ram ram);
     public abstract void RemoveEffect(Ram ram);
 
-
 }
